@@ -1,11 +1,50 @@
-﻿namespace MiniAccountApp.Models
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace MiniAccountApp.Models
 {
     public class ChartOfAccount
     {
-        public int AccountId { get; set; }
+        public Guid AccountId { get; set; }
+
+        [Required(ErrorMessage = "Account Code is required")]
+        [MaxLength(50)]
         public string AccountCode { get; set; }
+        
+        [Required(ErrorMessage = "Account Name is required")]
+        [MaxLength(150)]
         public string AccountName { get; set; }
+
+        [Required(ErrorMessage = "Account Type is required")]
+        [MaxLength(50)]
         public string AccountType { get; set; }
-        public int? ParentAccountId { get; set; }
+
+        [MaxLength(50)]
+        public string? AccountCategory { get; set; } 
+
+        public Guid? ParentAccountId { get; set; }
+
+        [Required]
+        public int AccountLevel { get; set; } = 1;
+
+        [Required(ErrorMessage = "Status is required")]
+        [MaxLength(50)]
+        public string IsActive { get; set; }
+
+        [MaxLength(20)]
+        public string? AccountNature { get; set; }
+        
+        [MaxLength(50)]
+        public string? CreatedBy { get; set; }
+
+        [MaxLength(50)]
+        public string? UpdatedBy { get; set; }       
+
+        public DateTime CreatedDate { get; set; }    
+
+        public DateTime? UpdatedDate { get; set; }
+
+        [MaxLength(500)]
+        public string? Description { get; set; }
     }
 }
