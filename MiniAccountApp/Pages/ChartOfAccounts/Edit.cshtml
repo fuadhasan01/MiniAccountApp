@@ -1,0 +1,40 @@
+﻿@page "{id:int}"
+@model MiniAccountApp.Pages.ChartOfAccounts.EditModel
+
+<h2>Edit Chart of Account</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="Account.AccountId" />
+
+    <div class="form-group">
+        <label asp-for="Account.AccountCode"></label>
+        <input asp-for="Account.AccountCode" class="form-control" />
+        <span asp-validation-for="Account.AccountCode" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Account.AccountName"></label>
+        <input asp-for="Account.AccountName" class="form-control" />
+        <span asp-validation-for="Account.AccountName" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Account.AccountType"></label>
+        <input asp-for="Account.AccountType" class="form-control" />
+        <span asp-validation-for="Account.AccountType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Account.ParentAccountId"></label>
+        <input asp-for="Account.ParentAccountId" class="form-control" />
+        <span asp-validation-for="Account.ParentAccountId" class="text-danger"></span>
+        <small>Optional - enter parent Account Id if applicable</small>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

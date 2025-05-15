@@ -1,0 +1,33 @@
+﻿@page
+@model MiniAccountApp.Pages.ChartOfAccounts.CreateModel
+
+<h2>Create New Chart of Account</h2>
+
+<form method="post">
+    <div class="form-group">
+        <label asp-for="Account.AccountCode"></label>
+        <input asp-for="Account.AccountCode" class="form-control" />
+        <span asp-validation-for="Account.AccountCode" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Account.AccountName"></label>
+        <input asp-for="Account.AccountName" class="form-control" />
+        <span asp-validation-for="Account.AccountName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Account.AccountType"></label>
+        <input asp-for="Account.AccountType" class="form-control" />
+        <span asp-validation-for="Account.AccountType" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Account.ParentAccountId"></label>
+        <input asp-for="Account.ParentAccountId" class="form-control" />
+        <span asp-validation-for="Account.ParentAccountId" class="text-danger"></span>
+        <small>Optional - enter parent Account Id if applicable</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
