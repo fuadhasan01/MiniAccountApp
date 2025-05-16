@@ -98,9 +98,10 @@ namespace MiniAccountApp.Services
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
 
             using var conn = new SqlConnection(connectionString);
-            string sql = "SELECT AccountId, AccountCode, AccountName, AccountType, ParentAccountId, AccountLevel, IsActive, AccountNature, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, Description FROM ChartOfAccounts ORDER BY AccountCode";
+            using var cmd = new SqlCommand("sp_ManageChartOfAccounts", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@Action", "SELECT");
             await conn.OpenAsync();
 
             using var reader = await cmd.ExecuteReaderAsync();
@@ -133,9 +134,10 @@ namespace MiniAccountApp.Services
         {
             string connectionString = _configuration.GetConnectionString("DefaultConnection");
             using var conn = new SqlConnection(connectionString);
-            string sql = "SELECT AccountId, AccountCode, AccountName, AccountType, ParentAccountId, AccountLevel, IsActive, AccountNature, CreatedBy, CreatedDate, UpdatedBy, UpdatedDate, Description FROM ChartOfAccounts WHERE AccountId = @AccountId";
+            using var cmd = new SqlCommand("sp_ManageChartOfAccounts", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
 
-            using var cmd = new SqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@Action", "SELECTBYID");
             cmd.Parameters.AddWithValue("@AccountId", accountId);
 
             await conn.OpenAsync();

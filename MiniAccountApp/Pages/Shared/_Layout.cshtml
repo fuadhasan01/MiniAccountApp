@@ -2,66 +2,162 @@
 <html lang="en">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - MiniAccountApp</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/MiniAccountApp.styles.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/MiniAccountApp.styles.css" rel="stylesheet" />
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .wrapper {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            background-color: #f8f9fa;
+            border-right: 1px solid #ddd;
+            height: 100vh;
+            position: relative;
+            z-index: 1000;
+            transition: width 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-inner {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .sidebar.collapsed {
+            width: 70px;
+        }
+
+            .sidebar.collapsed .sidebar-inner,
+            .sidebar.collapsed .nav-link span,
+            .sidebar.collapsed .sidebar-title,
+            .sidebar.collapsed .nav-section-title,
+            .sidebar.collapsed .bi-chevron-down {
+                display: none;
+            }
+
+        .main-content {
+            flex-grow: 1;
+            height: 100vh;
+            overflow-y: auto;
+            background-color: #fff;
+            transition: margin-left 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .breadcrumb-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 999;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 0.75rem 1rem;
+        }
+
+        .page-content {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .submenu-link.active {
+            background-color: #d0e2ff;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">MiniAccountApp</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
+    <div class="wrapper d-flex">
+        <!-- Sidebar -->
+        <div class="sidebar" id="sidebar">
+            <div class="d-flex justify-content-between align-items-center mt-2 mb-2 px-3">
+                <h5 class="mb-0 fw-bold sidebar-title">MiniAccountApp</h5>
+                <button class="btn btn-light border-0 p-0" id="toggleSidebar" type="button" aria-label="Toggle Sidebar">
+                    <i class="bi bi-list fs-4"></i>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        @if (User.Identity?.IsAuthenticated ?? false)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-page="/Index">Home</a>
-                            </li>
-                            @if (User.IsInRole("Admin"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Admin/Index">Admin Panel</a>
-								</li>
-								<li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/ChartOfAccounts/Index">ChartOfAccounts</a>
-								</li>
-                            }
-                            @if (User.IsInRole("Accountant"))
-                            {
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-page="/Vouchers/Index">Voucher Entry</a>
-                                </li>
-                            }
-                        }
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
+            <div class="sidebar-inner">
+                <nav class="nav flex-column">
+                    <a class="nav-link submenu-link" asp-page="/Index" data-controller="Index" data-action="Index">
+                        <i class="bi bi-house-door me-2"></i><span>Home</span>
+                    </a>
+                    @if (User.Identity?.IsAuthenticated ?? false)
+                    {
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a class="nav-link submenu-link" asp-page="/Admin/Index" data-controller="Admin" data-action="Index">
+                                <i class="bi bi-shield-lock me-2"></i><span>Admin Panel</span>
+                            </a>
+                            <a class="nav-link submenu-link" asp-page="/ChartOfAccounts/Index" data-controller="ChartOfAccounts" data-action="Index">
+                                <i class="bi bi-bookmarks me-2"></i><span>Chart Of Accounts</span>
+                            </a>
+                        }
+                        @if (User.IsInRole("Accountant"))
+                        {
+                            <a class="nav-link submenu-link" asp-page="/Vouchers/Index" data-controller="Vouchers" data-action="Index">
+                                <i class="bi bi-journal-text me-2"></i><span>Voucher Entry</span>
+                            </a>
+                        }
+                    }
+                </nav>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content" id="mainContent">
+            <div class="page-content">
+                @RenderBody()
+            </div>
+        </div>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2025 - MiniAccountApp - <a asp-area="" asp-page="/Privacy">Privacy</a>
-        </div>
-    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        const toggleSidebar = document.getElementById("toggleSidebar");
+        const sidebar = document.getElementById("sidebar");
 
-    @await RenderSectionAsync("Scripts", required: false)
+        toggleSidebar.addEventListener("click", () => {
+            sidebar.classList.toggle("collapsed");
+        });
+
+        $(function () {
+            const currentController = '@ViewContext.RouteData.Values["controller"]?.ToString().ToLower()';
+            const currentAction = '@ViewContext.RouteData.Values["action"]?.ToString().ToLower()';
+
+            $('.submenu-link').each(function () {
+                const $link = $(this);
+                const linkController = $link.data('controller')?.toLowerCase();
+                const linkAction = $link.data('action')?.toLowerCase();
+
+                if (linkController === currentController) {
+                    $link.addClass('active');
+                }
+            });
+        });
+    </script>
+
+    @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
+    <input type="hidden" id="antiForgeryToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
+
+    @RenderSection("Scripts", required: false)
 </body>
 </html>
