@@ -1,0 +1,41 @@
+﻿@model MiniAccountApp.Models.ChartOfAccount
+
+@{
+    var nodeId = "node_" + Model.AccountId.ToString().Replace("-", "");
+    var collapseId = "collapse_" + nodeId;
+    var headingId = "heading_" + nodeId;
+}
+
+@if (Model.Children.Count > 0)
+{
+    <div class="accordion" id="accordion_@nodeId">
+        <div class="accordion-item border-0">
+            <h2 class="accordion-header" id="@headingId">
+                <button class="accordion-button collapsed p-1 ps-3 bg-white text-secondary fw-normal"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId"
+                        style="font-size: 0.9rem; box-shadow:none;">
+                    <i class="bi bi-caret-right-fill me-2"></i> @Model.AccountCode - @Model.AccountName
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse ps-3" aria-labelledby="@headingId" data-bs-parent="#accordion_@nodeId">
+                <div class="accordion-body p-1 ps-4">
+                    <ul class="list-unstyled mb-0">
+                        @foreach (var child in Model.Children)
+                        {
+                            <li>
+                                <partial name="_AccountNodePartial" model="child" />
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="py-1 ps-4 text-secondary" style="font-size: 0.9rem;">
+        <i class="bi bi-circle-fill me-2" style="font-size: 0.5rem;"></i>
+        @Model.AccountCode - @Model.AccountName
+    </div>
+}

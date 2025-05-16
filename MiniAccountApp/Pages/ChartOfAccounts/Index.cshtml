@@ -4,73 +4,95 @@
 <h2 class="mb-4">Chart of Accounts</h2>
 <a asp-page="./Create" class="btn btn-primary mb-4">Create New Account</a>
 
-@foreach (var group in Model.AccountsByType)
-{
-    <div class="card mb-4 shadow-sm">
-        <div class="card-header bg-primary text-white fw-bold">
-            @group.Key
-        </div>
-        <div class="card-body">
-            @if (group.Value.Count > 0)
-            {
-                <ul class="account-tree list-unstyled">
-                    @foreach (var account in group.Value)
-                    {
-                        <li>
-                            <div class="account-node">
-                                <strong>@account.AccountCode</strong> - @account.AccountName
-                            </div>
+<div class="accordion" id="accountsAccordion">
+    @foreach (var group in Model.AccountsByType)
+    {
+        var collapseId = "collapse" + group.Key.Replace(" ", "");
+        var headingId = "heading" + group.Key.Replace(" ", "");
 
-                            @if (account.Children.Count > 0)
+        <div class="accordion-item shadow-sm mb-3 rounded">
+            <h2 class="accordion-header" id="@headingId">
+                <button class="accordion-button collapsed bg-white text-dark fw-semibold"
+                        type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId"
+                        style="border-radius: .375rem;">
+                    <i class="bi bi-folder me-3"></i> @group.Key
+                </button>
+            </h2>
+            <div id="@collapseId" class="accordion-collapse collapse" aria-labelledby="@headingId" data-bs-parent="#accountsAccordion">
+                <div class="accordion-body bg-light">
+                    @if (group.Value.Count > 0)
+                    {
+                        <ul class="list-unstyled ps-3">
+                            @foreach (var account in group.Value)
                             {
-                                <ul>
-                                    <partial name="_AccountTreePartial" model="account.Children" />
-                                </ul>
+                                <li class="mb-2">
+                                    <partial name="_AccountNodePartial" model="account" />
+                                </li>
                             }
-                        </li>
+                        </ul>
                     }
-                </ul>
-            }
-            else
-            {
-                <p class="text-muted">No accounts found in this group.</p>
-            }
+                    else
+                    {
+                        <p class="text-muted fst-italic">No accounts found in this group.</p>
+                    }
+                </div>
+            </div>
         </div>
-    </div>
-}
+    }
+</div>
 
 @section Styles {
     <style>
-        .account-tree li {
-            margin-left: 1.25rem;
-            position: relative;
-            padding-left: 1rem;
-        }
-
-            .account-tree li::before {
-                content: "";
-                position: absolute;
-                left: 0;
-                top: 0.75rem;
-                width: 0.75rem;
-                height: 0.125rem;
-                background-color: #6c757d;
-            }
-
-        .account-node {
-            cursor: default;
-            padding: 0.25rem 0.5rem;
+        /* Accordion button base */
+        .accordion-button {
             border-radius: 0.25rem;
+            box-shadow: none !important;
             transition: background-color 0.3s ease;
         }
 
-            .account-node:hover {
-                background-color: #e9ecef;
+            .accordion-button:not(.collapsed) {
+                background-color: #f8f9fa;
+                color: #212529;
+                font-weight: 600;
             }
 
-        ul ul {
-            margin-top: 0.25rem;
-            margin-bottom: 0.25rem;
+            .accordion-button:hover {
+                background-color: #e9ecef;
+                color: #212529;
+            }
+
+            /* Rotate caret icon on open */
+            .accordion-button.collapsed i.bi-caret-right-fill {
+                transform: rotate(0deg);
+                transition: transform 0.3s ease;
+                color: #6c757d;
+            }
+
+            .accordion-button:not(.collapsed) i.bi-caret-right-fill {
+                transform: rotate(90deg);
+                transition: transform 0.3s ease;
+                color: #0d6efd;
+            }
+
+        /* List marker for leaf nodes */
+        .bi-circle-fill {
+            color: #adb5bd;
         }
+
+        /* Indentation line for accounts */
+        ul li {
+            position: relative;
+            padding-left: 1.25rem;
+        }
+
+            ul li::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 1.0rem;
+                width: 0.8rem;
+                height: 0.12rem;
+                background-color: #dee2e6;
+            }
     </style>
 }
