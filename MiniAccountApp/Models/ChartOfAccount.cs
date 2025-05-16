@@ -7,9 +7,7 @@ namespace MiniAccountApp.Models
     {
         public Guid AccountId { get; set; }
 
-        [Required(ErrorMessage = "Account Code is required")]
-        [MaxLength(50)]
-        public string AccountCode { get; set; }
+        public string? AccountCode { get; set; }
         
         [Required(ErrorMessage = "Account Name is required")]
         [MaxLength(150)]
@@ -46,5 +44,7 @@ namespace MiniAccountApp.Models
 
         [MaxLength(500)]
         public string? Description { get; set; }
+
+        public List<ChartOfAccount> Children { get; set; } = new();
     }
 }

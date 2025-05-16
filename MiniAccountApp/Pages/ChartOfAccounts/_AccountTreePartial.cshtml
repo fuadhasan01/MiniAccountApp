@@ -1,0 +1,15 @@
+﻿@model List<MiniAccountApp.Models.ChartOfAccount>
+
+<ul>
+    @foreach (var account in Model)
+    {
+        <li>
+            @account.AccountCode - @account.AccountName
+
+            @if (account.Children.Any())
+            {
+                <partial name="_AccountTreePartial" model="account.Children" />
+            }
+        </li>
+    }
+</ul>

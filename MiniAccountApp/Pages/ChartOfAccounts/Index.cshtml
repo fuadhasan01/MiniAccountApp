@@ -1,0 +1,8 @@
+﻿@page
+@model MiniAccountApp.Pages.ChartOfAccounts.IndexModel
+
+<h2>Chart of Accounts</h2>
+<a asp-page="./Create" class="btn btn-primary mb-3">Create New Account</a>
+
+
+<partial name="_AccountTreePartial" model="Model.AccountTree" />

@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MiniAccountApp.Data;
 using Microsoft.AspNetCore.Identity;
+using MiniAccountApp.Services;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -19,6 +20,8 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 
 builder.Services.AddRazorPages();
+builder.Services.AddTransient<ChartOfAccountService>();
+
 
 var app = builder.Build();
 
