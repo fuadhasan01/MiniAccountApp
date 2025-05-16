@@ -8,16 +8,19 @@ using System.Text.Json.Serialization;
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using MiniAccountApp.Services;
+using System.Configuration;
 
 namespace MiniAccountApp.Pages.ChartOfAccounts
 {
     public class IndexModel : PageModel
     {
         private readonly ChartOfAccountService _service;
+        private readonly IConfiguration _configuration;
 
-        public IndexModel(ChartOfAccountService service)
+        public IndexModel(ChartOfAccountService service, IConfiguration configuration)
         {
             _service = service;
+            _configuration = configuration;
         }
 
         // Key: AccountType, Value: List of top-level accounts with children built
@@ -80,6 +83,36 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
 
             AccountsByType = orderedGroups;
         }
+
+        public async Task<IActionResult> OnPostDeleteAsync(Guid id)
+        {
+            string connStr = _configuration.GetConnectionString("DefaultConnection");
+            using var conn = new SqlConnection(connStr);
+            await conn.OpenAsync();
+
+            // Check if account has children: SELECT COUNT(*) FROM ChartOfAccounts WHERE ParentAccountId = @id
+            using var checkCmd = new SqlCommand("SELECT COUNT(*) FROM ChartOfAccounts WHERE ParentAccountId = @ParentId", conn);
+            checkCmd.Parameters.AddWithValue("@ParentId", id);
+            int childCount = (int)await checkCmd.ExecuteScalarAsync();
+
+            if (childCount > 0)
+            {
+                ModelState.AddModelError(string.Empty, "Cannot delete account because it has child accounts.");
+                await OnGetAsync(); // reload data to redisplay
+                return Page();
+            }
+
+            // Delete account using stored procedure
+            using var deleteCmd = new SqlCommand("sp_ManageChartOfAccounts", conn);
+            deleteCmd.CommandType = CommandType.StoredProcedure;
+            deleteCmd.Parameters.AddWithValue("@Action", "DELETE");
+            deleteCmd.Parameters.AddWithValue("@AccountId", id);
+
+            await deleteCmd.ExecuteNonQueryAsync();
+
+            return RedirectToPage();
+        }
+
     }
 
 }

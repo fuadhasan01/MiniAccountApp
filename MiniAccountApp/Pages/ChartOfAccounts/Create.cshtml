@@ -28,7 +28,7 @@
 
     <div class="mb-3">
         <label asp-for="ChartOfAccount.ParentAccountId" class="form-label"></label>
-        <select asp-for="ChartOfAccount.ParentAccountId" asp-items="Model.ParentAccounts" class="form-select">
+        <select asp-for="ChartOfAccount.ParentAccountId" asp-items="Model.ParentAccounts" class="form-select select2">
             <option value="">-- Select Parent Account (optional) --</option>
         </select>
     </div>
@@ -52,5 +52,18 @@
 </form>
 
 @section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
     <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2({
+                placeholder: "-- Select Parent Account (optional) --",
+                allowClear: true,
+                width: '100%'
+            });
+        });
+    </script>
+
 }
