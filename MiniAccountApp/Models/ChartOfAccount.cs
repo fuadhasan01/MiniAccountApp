@@ -45,6 +45,11 @@ namespace MiniAccountApp.Models
         [MaxLength(500)]
         public string? Description { get; set; }
 
+
+
+        // These properties are used for view purposes only
         public List<ChartOfAccount> Children { get; set; } = new();
+        public string? ParentAccountName { get; set; }
+
     }
 }

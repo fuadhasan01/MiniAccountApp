@@ -1,0 +1,91 @@
+﻿@page
+@model MiniAccountApp.Pages.ChartOfAccounts.ListModel
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" />
+<link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" />
+
+<h2>Accounts List</h2>
+
+<form method="get" class="row g-3 mb-3">
+    <div class="col-md-3">
+        <label for="AccountType" class="form-label">Account Type</label>
+        <select id="AccountType" name="AccountType" class="form-select">
+            <option value="">All</option>
+            @foreach (var type in Model.AccountTypes)
+            {
+                <option value="@type" selected="@(Model.FilterAccountType == type ? "selected" : null)">@type</option>
+            }
+        </select>
+    </div>
+
+    <div class="col-md-4">
+        <label for="AccountName" class="form-label">Account Name Contains</label>
+        <input type="text" id="AccountName" name="AccountName" class="form-control" value="@Model.FilterAccountName" />
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<table id="accountsTable" class="display table table-striped" style="width:100%">
+    <thead>
+        <tr>
+			<th>Account Code</th>
+			<th>Account Type</th>
+            <th>Account Name</th>
+            <th>Parent Account</th>
+            <th>Status</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Accounts.Count == 0)
+        {
+            <tr><td colspan="6" class="text-center">No accounts found.</td></tr>
+        }
+        else
+        {
+            @foreach (var acc in Model.Accounts)
+            {
+                <tr>
+					<td>@acc.AccountCode</td>
+					<td>@acc.AccountType</td>
+                    <td>@acc.AccountName</td>
+                    <td>@acc.ParentAccountName</td>
+                    <td>@acc.IsActive</td>
+                    <td>@acc.Description</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $('#accountsTable').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'excelHtml5',
+                    'pdfHtml5',
+                    'print'
+                ],
+                // Disable default ordering so your manual order is respected
+                ordering: false,
+                pageLength: 100, // Set the default number of rows per page to 100
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+                // Optional: you can configure more options here
+            });
+        });
+    </script>
+}
