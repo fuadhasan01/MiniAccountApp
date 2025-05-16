@@ -100,8 +100,8 @@ namespace MiniAccountApp.Services
             using var conn = new SqlConnection(connectionString);
             using var cmd = new SqlCommand("sp_ManageChartOfAccounts", conn);
             cmd.CommandType = CommandType.StoredProcedure;
-
             cmd.Parameters.AddWithValue("@Action", "SELECT");
+
             await conn.OpenAsync();
 
             using var reader = await cmd.ExecuteReaderAsync();
@@ -122,6 +122,7 @@ namespace MiniAccountApp.Services
                     UpdatedBy = reader.IsDBNull(reader.GetOrdinal("UpdatedBy")) ? null : reader.GetString(reader.GetOrdinal("UpdatedBy")),
                     UpdatedDate = reader.IsDBNull(reader.GetOrdinal("UpdatedDate")) ? null : reader.GetDateTime(reader.GetOrdinal("UpdatedDate")),
                     Description = reader.IsDBNull(reader.GetOrdinal("Description")) ? null : reader.GetString(reader.GetOrdinal("Description")),
+                    Children = new List<ChartOfAccount>()
                 };
 
                 accounts.Add(account);
@@ -129,6 +130,7 @@ namespace MiniAccountApp.Services
 
             return accounts;
         }
+
 
         public async Task<ChartOfAccount?> GetAccountByIdAsync(Guid accountId)
         {

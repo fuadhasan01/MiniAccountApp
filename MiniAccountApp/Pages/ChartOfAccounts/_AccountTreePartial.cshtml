@@ -1,12 +1,14 @@
 ﻿@model List<MiniAccountApp.Models.ChartOfAccount>
 
-<ul>
+<ul class="list-unstyled">
     @foreach (var account in Model)
     {
         <li>
-            @account.AccountCode - @account.AccountName
+            <div class="account-node">
+                <strong>@account.AccountCode</strong> - @account.AccountName
+            </div>
 
-            @if (account.Children.Any())
+            @if (account.Children.Count > 0)
             {
                 <partial name="_AccountTreePartial" model="account.Children" />
             }

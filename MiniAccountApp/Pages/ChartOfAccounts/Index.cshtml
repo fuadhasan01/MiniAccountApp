@@ -1,8 +1,76 @@
 ﻿@page
 @model MiniAccountApp.Pages.ChartOfAccounts.IndexModel
 
-<h2>Chart of Accounts</h2>
-<a asp-page="./Create" class="btn btn-primary mb-3">Create New Account</a>
+<h2 class="mb-4">Chart of Accounts</h2>
+<a asp-page="./Create" class="btn btn-primary mb-4">Create New Account</a>
 
+@foreach (var group in Model.AccountsByType)
+{
+    <div class="card mb-4 shadow-sm">
+        <div class="card-header bg-primary text-white fw-bold">
+            @group.Key
+        </div>
+        <div class="card-body">
+            @if (group.Value.Count > 0)
+            {
+                <ul class="account-tree list-unstyled">
+                    @foreach (var account in group.Value)
+                    {
+                        <li>
+                            <div class="account-node">
+                                <strong>@account.AccountCode</strong> - @account.AccountName
+                            </div>
 
-<partial name="_AccountTreePartial" model="Model.AccountTree" />
+                            @if (account.Children.Count > 0)
+                            {
+                                <ul>
+                                    <partial name="_AccountTreePartial" model="account.Children" />
+                                </ul>
+                            }
+                        </li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p class="text-muted">No accounts found in this group.</p>
+            }
+        </div>
+    </div>
+}
+
+@section Styles {
+    <style>
+        .account-tree li {
+            margin-left: 1.25rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+            .account-tree li::before {
+                content: "";
+                position: absolute;
+                left: 0;
+                top: 0.75rem;
+                width: 0.75rem;
+                height: 0.125rem;
+                background-color: #6c757d;
+            }
+
+        .account-node {
+            cursor: default;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .account-node:hover {
+                background-color: #e9ecef;
+            }
+
+        ul ul {
+            margin-top: 0.25rem;
+            margin-bottom: 0.25rem;
+        }
+    </style>
+}
