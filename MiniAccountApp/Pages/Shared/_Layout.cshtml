@@ -14,7 +14,6 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-
     @RenderSection("Styles", required: false)
     <style>
         html, body {
@@ -33,33 +32,48 @@
             width: 250px;
             background-color: #f8f9fa;
             border-right: 1px solid #ddd;
-            height: 100vh;
+            height: 100%;
             position: relative;
             z-index: 1000;
             transition: width 0.3s ease;
-            overflow: hidden;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
         }
 
         .sidebar-inner {
             flex: 1;
-            overflow-y: auto; 
-            overflow-x: hidden; 
-            padding: 1rem;
-            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Ensure vertical scrolling */
         }
 
+            /* Remove horizontal overflow */
             .sidebar-inner nav {
                 flex-grow: 1;
                 overflow-y: auto;
+                overflow-x: hidden;
             }
 
-            .sidebar-inner > div:last-child {
-                flex-shrink: 0;
-                border-top: 1px solid #ddd;
-            }
+        .logout-section {
+            flex-shrink: 0;
+            border-top: 1px solid #ddd;
+            padding: 1rem;
+            background-color: #f8f9fa;
+        }
 
+        .nav-link, .submenu-link {
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
+
+        .sidebar * {
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+
+        /* Sidebar collapsed */
         .sidebar.collapsed {
             width: 70px;
         }
@@ -98,10 +112,17 @@
         }
 
         .submenu-link.active {
-            background-color: #d0e2ff;
+            background-color: #d0e2ff !important;
             font-weight: bold;
             border-radius: 5px;
+            color: #000;
         }
+
+        #coaSubmenu .nav-link {
+            padding-left: 1.5rem;
+            font-size: 0.95rem;
+        }
+
     </style>
 </head>
 <body>
@@ -114,8 +135,8 @@
                     <i class="bi bi-list fs-4"></i>
                 </button>
             </div>
-            <div class="sidebar-inner">
-                <nav class="nav flex-column">
+            <div class="sidebar-inner d-flex flex-column">
+                <nav class="nav flex-column flex-grow-1 overflow-auto">
                     <a class="nav-link submenu-link" asp-page="/Index" data-controller="Index" data-action="Index">
                         <i class="bi bi-house-door me-2"></i><span>Home</span>
                     </a>
@@ -126,20 +147,36 @@
                             <a class="nav-link submenu-link" asp-page="/Admin/Index" data-controller="Admin" data-action="Index">
                                 <i class="bi bi-shield-lock me-2"></i><span>Admin Panel</span>
                             </a>
-                            <a class="nav-link submenu-link" asp-page="/ChartOfAccounts/Index" data-controller="ChartOfAccounts" data-action="Index">
-                                <i class="bi bi-bookmarks me-2"></i><span>Chart Of Accounts</span>
-							</a>
-                        }
-                        @if (User.IsInRole("Accountant"))
-                        {
-                            <a class="nav-link submenu-link" asp-page="/Vouchers/Index" data-controller="Vouchers" data-action="Index">
-                                <i class="bi bi-journal-text me-2"></i><span>Voucher Entry</span>
-                            </a>
+                            <div class="nav-item">
+                                <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
+                                   href="#coaSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="coaSubmenu">
+                                    <span><i class="bi bi-bookmarks me-2"></i>Chart Of Accounts</span>
+                                    <i class="bi bi-chevron-down ms-auto"></i>
+                                </a>
+                                <div class="collapse ps-4" id="coaSubmenu">
+                                    <a class="nav-link submenu-link d-flex align-items-center"
+                                       asp-page="/ChartOfAccounts/Create"
+                                       data-controller="ChartOfAccounts" data-action="Create">
+                                        <i class="bi bi-plus-circle me-2"></i> <span>Create New</span>
+                                    </a>
+                                    <a class="nav-link submenu-link d-flex align-items-center"
+                                       asp-page="/ChartOfAccounts/Index"
+                                       data-controller="ChartOfAccounts" data-action="HierarchyTree">
+                                        <i class="bi bi-diagram-3 me-2"></i> <span>COA Hierarchy Tree</span>
+                                    </a>
+                                    <a class="nav-link submenu-link d-flex align-items-center"
+                                       asp-page="/ChartOfAccounts/List"
+                                       data-controller="ChartOfAccounts" data-action="Index">
+                                        <i class="bi bi-list-columns me-2"></i> <span>COA List</span>
+                                    </a>
+                                </div>
+                            </div>
+
                         }
                     }
-                    
+
                 </nav>
-                <div>
+                <div class="logout-section mt-3">
                     @await Html.PartialAsync("_LoginPartial")
                 </div>
             </div>
@@ -157,28 +194,27 @@
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
     <script>
-        const toggleSidebar = document.getElementById("toggleSidebar");
-        const sidebar = document.getElementById("sidebar");
-
-        toggleSidebar.addEventListener("click", () => {
-            sidebar.classList.toggle("collapsed");
-        });
-
         $(function () {
-            const currentController = '@ViewContext.RouteData.Values["controller"]?.ToString().ToLower()';
-            const currentAction = '@ViewContext.RouteData.Values["action"]?.ToString().ToLower()';
+            const currentPath = window.location.pathname.toLowerCase();
 
             $('.submenu-link').each(function () {
                 const $link = $(this);
-                const linkController = $link.data('controller')?.toLowerCase();
-                const linkAction = $link.data('action')?.toLowerCase();
+                const href = $link.attr('href')?.toLowerCase();
 
-                if (linkController === currentController) {
+                if (href && currentPath === href) {
                     $link.addClass('active');
+
+                    const $collapse = $link.closest('.collapse');
+                    $collapse.addClass('show');
+
+                    const $toggle = $collapse.prev('[data-bs-toggle="collapse"]');
+                    $toggle.attr('aria-expanded', 'true');
+                    $toggle.find('.bi-chevron-down').css('transform', 'rotate(180deg)');
                 }
             });
         });
     </script>
+
 
     @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
     <input type="hidden" id="antiForgeryToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
