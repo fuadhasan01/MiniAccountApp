@@ -30,15 +30,28 @@
             position: relative;
             z-index: 1000;
             transition: width 0.3s ease;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
 
         .sidebar-inner {
             flex: 1;
-            overflow-y: auto;
+            overflow-y: auto; 
+            overflow-x: hidden; 
             padding: 1rem;
+            min-width: 0;
         }
+
+            .sidebar-inner nav {
+                flex-grow: 1;
+                overflow-y: auto;
+            }
+
+            .sidebar-inner > div:last-child {
+                flex-shrink: 0;
+                border-top: 1px solid #ddd;
+            }
 
         .sidebar.collapsed {
             width: 70px;
@@ -89,8 +102,8 @@
         <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="d-flex justify-content-between align-items-center mt-2 mb-2 px-3">
-                <h5 class="mb-0 fw-bold sidebar-title">MiniAccountApp</h5>
-                <button class="btn btn-light border-0 p-0" id="toggleSidebar" type="button" aria-label="Toggle Sidebar">
+                <h5 class="mb-0 fw-bold sidebar-title me-2">MiniAccountApp</h5>
+                <button class="btn btn-light border-0 p-0 ms-2" id="toggleSidebar" type="button" aria-label="Toggle Sidebar">
                     <i class="bi bi-list fs-4"></i>
                 </button>
             </div>
@@ -108,7 +121,7 @@
                             </a>
                             <a class="nav-link submenu-link" asp-page="/ChartOfAccounts/Index" data-controller="ChartOfAccounts" data-action="Index">
                                 <i class="bi bi-bookmarks me-2"></i><span>Chart Of Accounts</span>
-                            </a>
+							</a>
                         }
                         @if (User.IsInRole("Accountant"))
                         {
@@ -117,7 +130,11 @@
                             </a>
                         }
                     }
+                    
                 </nav>
+                <div>
+                    @await Html.PartialAsync("_LoginPartial")
+                </div>
             </div>
         </div>
 
