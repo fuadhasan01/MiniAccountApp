@@ -1,4 +1,40 @@
-﻿@page
+﻿@page "{id:guid}"
 @model MiniAccountApp.Pages.VoucherTypes.EditModel
-@{
+
+<h2>Edit Voucher Type</h2>
+
+<form method="post">
+    <input type="hidden" asp-for="VoucherType.VoucherTypeId" />
+
+    <div class="mb-3">
+        <label asp-for="VoucherType.TypeName" class="form-label"></label>
+        <input asp-for="VoucherType.TypeName" class="form-control" />
+        <span asp-validation-for="VoucherType.TypeName" class="text-danger"></span>
+	</div>
+
+	<div class="mb-3">
+		<label asp-for="VoucherType.TypeCode" class="form-label"></label>
+		<input asp-for="VoucherType.TypeCode" class="form-control" />
+		<span asp-validation-for="VoucherType.TypeCode" class="text-danger"></span>
+	</div>
+
+    <div class="mb-3">
+        <label asp-for="VoucherType.IsActive" class="form-label"></label>
+        <select asp-for="VoucherType.IsActive" class="form-select">
+            <option>Active</option>
+            <option>Inactive</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="VoucherType.Description" class="form-label"></label>
+        <textarea asp-for="VoucherType.Description" class="form-control"></textarea>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update</button>
+    <a asp-page="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

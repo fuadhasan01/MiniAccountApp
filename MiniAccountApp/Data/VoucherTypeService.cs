@@ -40,7 +40,6 @@ namespace MiniAccountApp.Data
                         VoucherTypeId = reader.GetGuid(reader.GetOrdinal("VoucherTypeId")),
                         TypeCode = reader["TypeCode"].ToString(),
                         TypeName = reader["TypeName"].ToString(),
-                        NumberPrefix = reader["NumberPrefix"].ToString(),
                         IsActive = reader["IsActive"].ToString(),
                         CreatedBy = reader["CreatedBy"].ToString(),
                         CreatedAt = Convert.ToDateTime(reader["CreatedAt"]),
@@ -72,7 +71,6 @@ namespace MiniAccountApp.Data
                         VoucherTypeId = reader.GetGuid(reader.GetOrdinal("VoucherTypeId")),
                         TypeCode = reader["TypeCode"].ToString(),
                         TypeName = reader["TypeName"].ToString(),
-                        NumberPrefix = reader["NumberPrefix"].ToString(),
                         IsActive = reader["IsActive"].ToString(),
                         CreatedBy = reader["CreatedBy"].ToString(),
                         CreatedAt = Convert.ToDateTime(reader["CreatedAt"]),
@@ -94,7 +92,6 @@ namespace MiniAccountApp.Data
                 cmd.Parameters.AddWithValue("@Action", "CREATE");
                 cmd.Parameters.AddWithValue("@TypeCode", model.TypeCode);
                 cmd.Parameters.AddWithValue("@TypeName", model.TypeName);
-                cmd.Parameters.AddWithValue("@NumberPrefix", (object)model.NumberPrefix ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@IsActive", model.IsActive);
                 cmd.Parameters.AddWithValue("@CreatedBy", model.CreatedBy ?? "system");
                 cmd.Parameters.AddWithValue("@Description", (object)model.Description ?? DBNull.Value);
@@ -114,7 +111,6 @@ namespace MiniAccountApp.Data
                 cmd.Parameters.AddWithValue("@VoucherTypeId", model.VoucherTypeId);
                 cmd.Parameters.AddWithValue("@TypeCode", model.TypeCode);
                 cmd.Parameters.AddWithValue("@TypeName", model.TypeName);
-                cmd.Parameters.AddWithValue("@NumberPrefix", (object)model.NumberPrefix ?? DBNull.Value);
                 cmd.Parameters.AddWithValue("@IsActive", model.IsActive);
                 cmd.Parameters.AddWithValue("@UpdatedBy", model.UpdatedBy ?? "system");
                 cmd.Parameters.AddWithValue("@Description", (object)model.Description ?? DBNull.Value);

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using MiniAccountApp.Data;
@@ -22,6 +23,11 @@ namespace MiniAccountApp.Pages.VoucherTypes
         public void OnGet()
         {
             VoucherTypes = _voucherTypeService.GetAllVoucherTypes();
+        }
+        public IActionResult OnPostDelete(Guid id)
+        {
+            _voucherTypeService.DeleteVoucherType(id);
+            return RedirectToPage();
         }
     }
 }

@@ -8,8 +8,8 @@
 <table class="table">
     <thead>
         <tr>
-            <th>Type Code</th>
-            <th>Type Name</th>
+			<th>Type Name</th>
+			<th>Type Code</th>
             <th>Status</th>
             <th>Actions</th>
         </tr>
@@ -18,14 +18,24 @@
         @foreach (var item in Model.VoucherTypes)
         {
             <tr>
-                <td>@item.TypeCode</td>
-                <td>@item.TypeName</td>
+				<td>@item.TypeName</td>
+				<td>@item.TypeCode</td>
                 <td>@item.IsActive</td>
                 <td>
                     <a asp-page="Edit" asp-route-id="@item.VoucherTypeId">Edit</a> |
-                    <a asp-page="Delete" asp-route-id="@item.VoucherTypeId">Delete</a>
+                    <form method="post" asp-page-handler="Delete" asp-route-id="@item.VoucherTypeId" style="display:inline;" onsubmit="return confirmDelete();">
+                        <button type="submit" class="btn btn-link text-danger p-0">Delete</button>
+                    </form>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script>
+        function confirmDelete() {
+            return confirm("Are you sure you want to delete this voucher type?");
+        }
+    </script>
+}
