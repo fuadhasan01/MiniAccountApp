@@ -1,0 +1,31 @@
+﻿@page
+@model MiniAccountApp.Pages.VoucherTypes.IndexModel
+
+<h2>Voucher Types</h2>
+
+<a class="btn btn-primary" asp-page="Create">Create New</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Type Code</th>
+            <th>Type Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.VoucherTypes)
+        {
+            <tr>
+                <td>@item.TypeCode</td>
+                <td>@item.TypeName</td>
+                <td>@item.IsActive</td>
+                <td>
+                    <a asp-page="Edit" asp-route-id="@item.VoucherTypeId">Edit</a> |
+                    <a asp-page="Delete" asp-route-id="@item.VoucherTypeId">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

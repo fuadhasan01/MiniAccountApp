@@ -21,6 +21,7 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>()
 
 builder.Services.AddRazorPages();
 builder.Services.AddTransient<ChartOfAccountService>();
+builder.Services.AddTransient<VoucherTypeService>();
 
 
 var app = builder.Build();
