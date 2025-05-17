@@ -1,0 +1,189 @@
+﻿@page
+@model MiniAccountApp.Pages.Vouchers.CreateModel
+@{
+    ViewData["Title"] = "Create Voucher";
+}
+
+<h2 class="mb-4">Create Voucher</h2>
+
+<form method="post" class="needs-validation" novalidate>
+    <div class="row g-3">
+        <div class="col-md-4">
+            <label asp-for="Voucher.VoucherTypeId" class="form-label">Voucher Type</label>
+            <select asp-for="Voucher.VoucherTypeId" asp-items="Model.VoucherTypes" class="form-select" required>
+                <option value="">-- Select Type --</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label asp-for="Voucher.VoucherDate" class="form-label">Date</label>
+            <input asp-for="Voucher.VoucherDate" class="form-control" type="date" required />
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Voucher.Remarks" class="form-label">Remarks</label>
+            <textarea asp-for="Voucher.Remarks" class="form-control" rows="2"></textarea>
+        </div>
+    </div>
+
+    <hr class="my-4" />
+
+    <h5>Voucher Entries</h5>
+    <div id="entry-list">
+        <div class="row g-3 entry-item">
+            <div class="col-md-4">
+                <select name="Voucher.Entries[0].AccountId" asp-items="Model.AccountList" class="form-select account-select" required>
+                    <option value="">-- Select Account --</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <input name="Voucher.Entries[0].Particulars" class="form-control" placeholder="Particulars" />
+            </div>
+            <div class="col-md-2">
+                <input name="Voucher.Entries[0].DebitAmount" type="number" step="0.01" class="form-control" placeholder="Debit" />
+            </div>
+            <div class="col-md-2">
+                <input name="Voucher.Entries[0].CreditAmount" type="number" step="0.01" class="form-control" placeholder="Credit" />
+            </div>
+            <div class="col-md-1 d-flex align-items-center">
+                <button type="button" class="btn btn-danger btn-sm remove-entry">✕</button>
+            </div>
+        </div>
+    </div>
+
+    <button type="button" id="add-entry" class="btn btn-outline-primary mt-3">+ Add Entry</button>
+    <div class="mt-3 d-flex justify-content-end">
+        <div class="text-end">
+            <div><strong>Total Debit:</strong> <span id="total-debit" class="fw-bold text-primary">0.00</span></div>
+            <div><strong>Total Credit:</strong> <span id="total-credit" class="fw-bold text-success">0.00</span></div>
+        </div>
+    </div>
+
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-success">💾 Save Voucher</button>
+        <a asp-page="Index" class="btn btn-secondary">🔙 Cancel</a>
+    </div>
+</form>
+
+<!-- 🔧 Hidden Template -->
+<template id="entry-template">
+    <div class="row g-3 entry-item mt-3">
+        <div class="col-md-4">
+            <select class="form-select account-select" required>
+                <option value="">-- Select Account --</option>
+                @foreach (var item in Model.AccountList)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="col-md-3">
+            <input class="form-control" placeholder="Particulars" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.01" class="form-control" placeholder="Debit" />
+        </div>
+        <div class="col-md-2">
+            <input type="number" step="0.01" class="form-control" placeholder="Credit" />
+        </div>
+        <div class="col-md-1 d-flex align-items-center">
+            <button type="button" class="btn btn-danger btn-sm remove-entry">✕</button>
+        </div>
+    </div>
+</template>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        function calculateTotals() {
+            let totalDebit = 0;
+            let totalCredit = 0;
+
+            $('input[name$="DebitAmount"]').each(function () {
+                let val = parseFloat($(this).val()) || 0;
+                totalDebit += val;
+            });
+
+            $('input[name$="CreditAmount"]').each(function () {
+                let val = parseFloat($(this).val()) || 0;
+                totalCredit += val;
+            });
+
+            $('#total-debit').text(totalDebit.toFixed(2));
+            $('#total-credit').text(totalCredit.toFixed(2));
+        }
+
+        $(document).on('input', 'input[name$="DebitAmount"], input[name$="CreditAmount"]', function () {
+            calculateTotals();
+        });
+        $(document).ready(function () {
+            calculateTotals();
+            let entryIndex = 1;
+
+            // Initial Select2 setup
+            $('.account-select').select2({
+                placeholder: "-- Select Account --",
+                allowClear: true,
+                width: '100%'
+            });
+
+            $('#add-entry').on('click', function () {
+                const template = $('#entry-template').html();
+                const $entry = $(template);
+
+                // Update name attributes
+                $entry.find('select, input').each(function () {
+                    const $el = $(this);
+                    let name = "";
+
+                    if ($el.is('select')) name = `Voucher.Entries[${entryIndex}].AccountId`;
+                    else if ($el.attr('placeholder') === 'Particulars') name = `Voucher.Entries[${entryIndex}].Particulars`;
+                    else if ($el.attr('placeholder') === 'Debit') name = `Voucher.Entries[${entryIndex}].DebitAmount`;
+                    else if ($el.attr('placeholder') === 'Credit') name = `Voucher.Entries[${entryIndex}].CreditAmount`;
+
+                    $el.attr('name', name);
+                });
+
+                $('#entry-list').append($entry);
+
+                // Re-initialize Select2
+                $entry.find('.account-select').select2({
+                    placeholder: "-- Select Account --",
+                    allowClear: true,
+                    width: '100%'
+                });
+
+                entryIndex++;
+                calculateTotals();
+            });
+
+            // Remove entry
+            $('#entry-list').on('click', '.remove-entry', function () {
+                if ($('.entry-item').length > 1) {
+                    $(this).closest('.entry-item').remove();
+                    calculateTotals();
+                } else {
+                    alert("At least one entry is required.");
+                }
+            });
+        });
+
+        $('form').on('submit', function (e) {
+            const totalDebit = parseFloat($('#total-debit').text()) || 0;
+            const totalCredit = parseFloat($('#total-credit').text()) || 0;
+
+            if (totalDebit !== totalCredit) {
+                e.preventDefault(); // Stop form submission
+                alert("❗ Total Debit and Credit must be equal.");
+                return false;
+            }
+
+            return true;
+        });
+    </script>
+}

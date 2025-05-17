@@ -1,0 +1,58 @@
+﻿@page
+@model MiniAccountApp.Pages.Vouchers.IndexModel
+@{
+    ViewData["Title"] = "All Vouchers";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2 class="text-primary">📋 Voucher List</h2>
+        <a asp-page="Create" class="btn btn-outline-success">➕ New Voucher</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <div class="table-responsive">
+        <table class="table table-hover table-bordered align-middle shadow-sm">
+            <thead class="table-light text-center">
+                <tr>
+                    <th>Voucher No</th>
+                    <th>Date</th>
+                    <th>Remarks</th>
+                    <th>Created</th>
+                    <th style="width: 100px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Vouchers.Count == 0)
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted">No vouchers found.</td>
+                    </tr>
+                }
+                else
+                {
+                    foreach (var v in Model.Vouchers)
+                    {
+                        <tr class="text-center">
+                            <td>@v.VoucherNo</td>
+                            <td>@v.VoucherDate.ToString("yyyy-MM-dd")</td>
+                            <td>@v.Remarks</td>
+                            <td>@v.CreatedDate.ToString("yyyy-MM-dd")</td>
+                            <td>
+                                <a asp-page="Edit" asp-route-id="@v.VoucherId" class="btn btn-sm btn-outline-primary">✏️ Edit</a>
+
+                            </td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
