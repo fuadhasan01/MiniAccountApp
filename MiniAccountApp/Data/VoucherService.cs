@@ -123,8 +123,29 @@ namespace MiniAccountApp.Data
             table.Columns.Add("CreditAmount", typeof(decimal));
             foreach (var e in dto.Entries)
             {
-                table.Rows.Add(e.AccountId, e.Particulars ?? (object)DBNull.Value, e.DebitAmount ?? 0, e.CreditAmount ?? 0);
+                object debit = DBNull.Value;
+                object credit = DBNull.Value;
+
+                if (e.DebitAmount.HasValue && e.DebitAmount.Value > 0)
+                    debit = e.DebitAmount.Value;
+
+                if (e.CreditAmount.HasValue && e.CreditAmount.Value > 0)
+                    credit = e.CreditAmount.Value;
+
+                if (debit != DBNull.Value && credit != DBNull.Value)
+                    throw new Exception("A voucher entry cannot have both Debit and Credit.");
+
+                if (debit == DBNull.Value && credit == DBNull.Value)
+                    throw new Exception("A voucher entry must have either Debit or Credit.");
+
+                table.Rows.Add(
+                    e.AccountId,
+                    e.Particulars ?? (object)DBNull.Value,
+                    debit,
+                    credit
+                );
             }
+
 
             var tvpParam = cmd.Parameters.AddWithValue("@Entries", table);
             tvpParam.SqlDbType = SqlDbType.Structured;
