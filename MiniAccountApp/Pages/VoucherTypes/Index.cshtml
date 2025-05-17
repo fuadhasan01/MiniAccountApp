@@ -1,36 +1,119 @@
 ﻿@page
 @model MiniAccountApp.Pages.VoucherTypes.IndexModel
 
-<h2>Voucher Types</h2>
+<style>
+    :root {
+        --primary-color: #7a9e9f;
+        --accent-bg: #f2f6f7;
+        --header-color: #3c3a36;
+        --row-hover: #f9fbfc;
+    }
 
-<a class="btn btn-primary" asp-page="Create">Create New</a>
+    body {
+        background-color: var(--accent-bg);
+    }
 
-<table class="table">
-    <thead>
-        <tr>
-			<th>Type Name</th>
-			<th>Type Code</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.VoucherTypes)
-        {
-            <tr>
-				<td>@item.TypeName</td>
-				<td>@item.TypeCode</td>
-                <td>@item.IsActive</td>
-                <td>
-                    <a asp-page="Edit" asp-route-id="@item.VoucherTypeId">Edit</a> |
-                    <form method="post" asp-page-handler="Delete" asp-route-id="@item.VoucherTypeId" style="display:inline;" onsubmit="return confirmDelete();">
-                        <button type="submit" class="btn btn-link text-danger p-0">Delete</button>
-                    </form>
-                </td>
-            </tr>
+    .table-wrapper {
+        max-width: 900px;
+        margin: 3rem auto;
+        background: #ffffff;
+        border-radius: 0.75rem;
+        padding: 2rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    }
+
+    .page-title {
+        color: var(--header-color);
+        font-weight: 600;
+        font-size: 1.6rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-custom {
+        background-color: var(--primary-color);
+        border: none;
+        color: #fff;
+        padding: 0.4rem 1.2rem;
+        border-radius: 20px;
+        font-size: 0.9rem;
+    }
+
+        .btn-custom:hover {
+            background-color: #658c8e;
         }
-    </tbody>
-</table>
+
+    .table thead {
+        background-color: #e9f1f2;
+    }
+
+    .table th {
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .table td {
+        vertical-align: middle;
+    }
+
+    .table tbody tr:hover {
+        background-color: var(--row-hover);
+    }
+
+    .action-link {
+        font-size: 0.9rem;
+        color: var(--primary-color);
+        text-decoration: none;
+    }
+
+        .action-link:hover {
+            text-decoration: underline;
+        }
+
+    .btn-link.text-danger {
+        font-size: 0.9rem;
+        color: #c25d5d;
+    }
+
+        .btn-link.text-danger:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="table-wrapper">
+    <h2 class="page-title">Voucher Types</h2>
+
+    <div class="mb-3">
+        <a class="btn btn-custom" asp-page="Create">Create New</a>
+    </div>
+
+    <table class="table align-middle">
+        <thead>
+            <tr>
+                <th>Type Name</th>
+                <th>Type Code</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.VoucherTypes)
+            {
+                <tr>
+                    <td>@item.TypeName</td>
+                    <td>@item.TypeCode</td>
+                    <td>@item.IsActive</td>
+                    <td>
+                        <a asp-page="Edit" asp-route-id="@item.VoucherTypeId" class="action-link me-2">Edit</a>
+                        |
+                        <form method="post" asp-page-handler="Delete" asp-route-id="@item.VoucherTypeId" style="display:inline;" onsubmit="return confirmDelete();">
+                            <button type="submit" class="btn btn-link text-danger p-0 ms-2">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 
 @section Scripts {
     <script>

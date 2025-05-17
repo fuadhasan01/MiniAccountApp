@@ -4,7 +4,7 @@
     ViewData["Title"] = "Create Chart of Account";
 }
 
-<h2 class="mb-4">Create Chart of Account</h2>
+<h2 class="mb-4 text-center">Create Chart of Account</h2>
 
 <form method="post" class="needs-validation" novalidate>
     <div class="mb-3">
@@ -50,6 +50,92 @@
 
     <button type="submit" class="btn btn-primary px-4">Create Account</button>
 </form>
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #7a9e9f;
+            --form-bg: #f9fbfc;
+            --border-color: #cfd8dc;
+            --text-color: #2c3e50;
+            --label-color: #5f6b6d;
+            --error-color: #d9534f;
+        }
+
+        h2.mb-4 {
+            color: var(--text-color);
+            font-weight: 600;
+        }
+
+        form {
+            max-width: 700px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: var(--form-bg);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        }
+
+        .form-label {
+            color: var(--label-color);
+            font-weight: 500;
+        }
+
+        .form-control,
+        .form-select,
+        textarea {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s ease;
+        }
+
+            .form-control:focus,
+            .form-select:focus,
+            textarea:focus {
+                border-color: var(--primary-color);
+                box-shadow: none;
+            }
+
+        .select2-container--default .select2-selection--single {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            height: 38px;
+            padding: 5px 8px;
+        }
+
+            .select2-container--default .select2-selection--single:focus,
+            .select2-container--default .select2-selection--single:active {
+                border-color: var(--primary-color);
+                box-shadow: none;
+            }
+
+        .select2-selection__rendered {
+            color: #495057;
+            line-height: 28px;
+        }
+
+        .select2-selection__arrow {
+            top: 6px !important;
+        }
+
+        .text-danger {
+            color: var(--error-color);
+            font-size: 0.875rem;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+        }
+
+            .btn-primary:hover {
+                background-color: #658c8e;
+            }
+    </style>
+}
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

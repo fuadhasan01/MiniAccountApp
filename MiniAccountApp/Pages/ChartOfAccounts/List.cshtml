@@ -61,6 +61,118 @@
     </tbody>
 </table>
 
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #7a9e9f;
+            --bg-light: #f9fbfc;
+            --border-color: #d6dede;
+            --text-main: #344a4e;
+            --text-muted: #6c757d;
+        }
+
+        h2 {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        form .form-label {
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .form-control,
+        .form-select {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s ease;
+        }
+
+            .form-control:focus,
+            .form-select:focus {
+                border-color: var(--primary-color);
+                box-shadow: none;
+            }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+        }
+
+            .btn-primary:hover {
+                background-color: #658c8e;
+            }
+
+        /* DataTable Customization */
+        table.dataTable {
+            border-collapse: separate;
+            border-spacing: 0;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            overflow: hidden;
+            background-color: #fff;
+        }
+
+            table.dataTable thead {
+                background-color: #eef3f2;
+                color: var(--text-main);
+            }
+
+            table.dataTable th {
+                font-weight: 600;
+                font-size: 0.95rem;
+            }
+
+            table.dataTable tbody td {
+                font-size: 0.925rem;
+                color: var(--text-main);
+            }
+
+            table.dataTable tbody tr:hover {
+                background-color: var(--bg-light);
+            }
+
+        .dataTables_filter input {
+            border-radius: 8px;
+            padding: 0.3rem 0.6rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .dt-buttons .btn {
+            background-color: #d3e2e1;
+            border-radius: 20px;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            margin-right: 0.5rem;
+            font-size: 0.85rem;
+            color: #2c3e50;
+        }
+
+            .dt-buttons .btn:hover {
+                background-color: #b9cecd;
+            }
+
+        .dataTables_length select,
+        .dataTables_filter input {
+            border-radius: 8px;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border-radius: 50px !important;
+            padding: 0.25rem 0.75rem !important;
+            color: var(--primary-color) !important;
+        }
+
+        .dataTables_wrapper .dataTables_info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+    </style>
+}
+
+
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
