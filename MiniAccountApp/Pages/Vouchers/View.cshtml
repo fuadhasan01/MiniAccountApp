@@ -1,0 +1,36 @@
+﻿@page "{id:guid}"
+@model MiniAccountApp.Pages.Vouchers.ViewModel
+@{
+    ViewData["Title"] = "View Voucher Details";
+}
+
+<h2>Voucher Details: @Model.Voucher.VoucherNo</h2>
+
+<div class="mb-4">
+    <p><strong>Date:</strong> @Model.Voucher.VoucherDate.ToString("yyyy-MM-dd")</p>
+    <p><strong>Remarks:</strong> @Model.Voucher.Remarks</p>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead>
+        <tr>
+            <th>Account</th>
+            <th>Particulars</th>
+            <th>Debit Amount</th>
+            <th>Credit Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in Model.Voucher.Entries)
+        {
+            <tr>
+                <td>@(Model.AccountNames.ContainsKey(entry.AccountId) ? Model.AccountNames[entry.AccountId] : "Unknown")</td>
+                <td>@entry.Particulars</td>
+                <td>@(entry.DebitAmount?.ToString("N2") ?? "-")</td>
+                <td>@(entry.CreditAmount?.ToString("N2") ?? "-")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-page="/Vouchers/List" class="btn btn-secondary mt-3">Back to List</a>

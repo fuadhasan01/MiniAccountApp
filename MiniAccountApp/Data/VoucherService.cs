@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using MiniAccountApp.Models;
+using MiniAccountApp.Pages.Vouchers;
 using System.Data;
 
 namespace MiniAccountApp.Data
@@ -153,6 +154,32 @@ namespace MiniAccountApp.Data
 
             conn.Open();
             cmd.ExecuteNonQuery();
+        }
+        public List<VoucherListDto> GetAllVouchers()
+        {
+            var list = new List<VoucherListDto>();
+            using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            using var cmd = new SqlCommand("sp_ManageVouchers", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Action", "GETALL");
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new VoucherListDto
+                {
+                    VoucherId = reader.GetGuid(reader.GetOrdinal("VoucherId")),
+                    VoucherNo = reader.GetString(reader.GetOrdinal("VoucherNo")),
+                    VoucherDate = reader.GetDateTime(reader.GetOrdinal("VoucherDate")),
+                    Remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? "" : reader.GetString(reader.GetOrdinal("Remarks")),
+                    CreatedDate = reader.GetDateTime(reader.GetOrdinal("CreatedDate")),
+                    VoucherTypeId = reader.GetGuid(reader.GetOrdinal("VoucherTypeId")),
+                    VoucherTypeName = reader.IsDBNull(reader.GetOrdinal("TypeName"))
+                ? "" : reader.GetString(reader.GetOrdinal("TypeName"))
+                });
+            }
+            return list;
         }
 
 

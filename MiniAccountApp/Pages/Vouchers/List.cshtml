@@ -1,0 +1,96 @@
+﻿@page
+@model MiniAccountApp.Pages.Vouchers.ListModel
+@{
+    ViewData["Title"] = "Voucher List";
+}
+
+<h2>Voucher List</h2>
+
+<div class="mb-3 row gx-2">
+	<div class="col-md-3">
+		<label for="filterFromDate" class="form-label">From Date</label>
+		<input type="date" id="filterFromDate" class="form-control" />
+	</div>
+
+	<div class="col-md-2">
+		<label for="filterToDate" class="form-label">To Date</label>
+		<input type="date" id="filterToDate" class="form-control" />
+	</div>
+    <div class="col-md-3">
+        <label for="filterVoucherType" class="form-label">Voucher Type</label>
+        <select id="filterVoucherType" class="form-select">
+            <option value="">-- All Voucher Types --</option>
+            @foreach (var vt in Model.VoucherTypes)
+            {
+                <option value="@vt.Value">@vt.Text</option>
+            }
+        </select>
+    </div>
+</div>
+
+<table id="voucherTable" class="table table-striped">
+    <thead>
+        <tr>
+            <th>Voucher No</th>
+            <th>Date</th>
+            <th>Voucher Type</th>
+            <th>Remarks</th>
+            <th>Created Date</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var v in Model.Vouchers)
+        {
+            <tr data-vouchertype="@v.VoucherTypeId" data-voucherdate="@v.VoucherDate.ToString("yyyy-MM-dd")" data-voucherid="@v.VoucherId">
+                <td>@v.VoucherNo</td>
+                <td>@v.VoucherDate.ToString("yyyy-MM-dd")</td>
+                <td>@v.VoucherTypeName</td>
+                <td>@v.Remarks</td>
+                <td>@v.CreatedDate.ToString("yyyy-MM-dd")</td>
+                <td>
+                    <a asp-page="/Vouchers/View" asp-route-id="@v.VoucherId" class="btn btn-sm btn-outline-info">View</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" />
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#voucherTable').DataTable({
+                pageLength: 10,
+                order: [[1, 'desc']],
+            });
+
+            $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                var filterVoucherType = $('#filterVoucherType').val();
+                var filterAccount = $('#filterAccount').val(); // Account filtering requires server-side or additional client logic
+                var filterFromDate = $('#filterFromDate').val();
+                var filterToDate = $('#filterToDate').val();
+
+                var row = table.row(dataIndex).node();
+                var rowVoucherType = $(row).data('vouchertype');
+                var rowVoucherDate = $(row).data('voucherdate');
+
+                if (filterVoucherType && rowVoucherType !== filterVoucherType) return false;
+
+                if (filterFromDate && rowVoucherDate < filterFromDate) return false;
+                if (filterToDate && rowVoucherDate > filterToDate) return false;
+
+                // Account filter not implemented client-side here
+
+                return true;
+            });
+
+            $('#filterVoucherType, #filterAccount, #filterFromDate, #filterToDate').on('change', function () {
+                table.draw();
+            });
+        });
+    </script>
+}
