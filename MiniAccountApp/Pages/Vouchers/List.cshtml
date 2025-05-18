@@ -168,16 +168,45 @@
             color: var(--text-muted);
         }
     </style>
+    <link href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css" rel="stylesheet" />
+
 }
 
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+
+    <!-- Buttons extension and dependencies -->
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
     <script>
         $(document).ready(function () {
             var table = $('#voucherTable').DataTable({
                 pageLength: 25,
-                order: [[1, 'desc']]
+                order: [[1, 'desc']],
+                dom: 'Bfrtip', // show buttons on top
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Voucher List',
+                        className: 'btn btn-outline-primary btn-sm me-2'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Voucher List',
+                        className: 'btn btn-outline-primary btn-sm me-2'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Voucher List',
+                        className: 'btn btn-outline-primary btn-sm'
+                    }
+                ]
             });
 
             $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
@@ -190,7 +219,6 @@
                 var rowVoucherDate = $(row).data('voucherdate');
 
                 if (filterVoucherType && rowVoucherType !== filterVoucherType) return false;
-
                 if (filterFromDate && rowVoucherDate < filterFromDate) return false;
                 if (filterToDate && rowVoucherDate > filterToDate) return false;
 

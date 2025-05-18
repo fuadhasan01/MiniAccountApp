@@ -4,6 +4,7 @@
     {
         public Guid VoucherId { get; set; }
         public Guid VoucherTypeId { get; set; }
+        public string? VoucherTypeName { get; set; }
         public DateTime VoucherDate { get; set; }
         public string? VoucherNo { get; set; }
         public string? Remarks { get; set; }

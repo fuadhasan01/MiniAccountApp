@@ -83,6 +83,8 @@ namespace MiniAccountApp.Data
                 dto.VoucherDate = reader.GetDateTime(reader.GetOrdinal("VoucherDate"));
                 dto.Remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? null : reader.GetString(reader.GetOrdinal("Remarks"));
                 dto.VoucherNo = reader.GetString(reader.GetOrdinal("VoucherNo"));
+                dto.VoucherTypeName = reader.IsDBNull(reader.GetOrdinal("TypeName")) ? null : reader.GetString(reader.GetOrdinal("TypeName"));
+
             }
 
             if (reader.NextResult())
