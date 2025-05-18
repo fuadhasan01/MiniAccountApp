@@ -64,8 +64,8 @@
         <tfoot class="font-weight: 600; background-color: #f4f6f5;">
             <tr>
                 <td colspan="3" class="text-end">Grand Total</td>
-                <td class="text-end text-success">@Model.Summaries.Sum(x => x.TotalDebit).ToString("N2")</td>
-                <td class="text-end text-danger">@Model.Summaries.Sum(x => x.TotalCredit).ToString("N2")</td>
+                <td class="text-end fw-semibold text-success">@Model.Summaries.Sum(x => x.TotalDebit).ToString("N2")</td>
+                <td class="text-end fw-semibold text-danger">@Model.Summaries.Sum(x => x.TotalCredit).ToString("N2")</td>
                 <td></td>
             </tr>
         </tfoot>
