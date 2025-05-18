@@ -1,0 +1,17 @@
+﻿@page
+@model MiniAccountApp.Pages.Admin.DeleteUserModel
+@{
+    ViewData["Title"] = "Delete User";
+}
+
+<h2>Delete User</h2>
+
+<div class="alert alert-danger">
+    Are you sure you want to delete user <strong>@Model.Email</strong>?
+</div>
+
+<form method="post">
+    <input type="hidden" asp-for="UserId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="Users" class="btn btn-secondary ms-2">Cancel</a>
+</form>
