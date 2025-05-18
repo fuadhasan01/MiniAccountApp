@@ -1,0 +1,165 @@
+﻿@page
+@model MiniAccountApp.Pages.Reports.TrialBalanceModel
+@{
+    ViewData["Title"] = "Trial Balance Report";
+}
+
+<h2 class="text-center mb-4" style="color:#344a4e; font-weight:600;">Trial Balance Report</h2>
+
+<form method="post" class="row g-3 mb-3 justify-content-center" style="max-width: 600px; margin:auto;">
+    <div class="col-md-5">
+        <label asp-for="StartDate" class="form-label" style="color:#5f6b6d; font-weight:500;">Start Date</label>
+        <input asp-for="StartDate" type="date" class="form-control" />
+    </div>
+    <div class="col-md-5">
+        <label asp-for="EndDate" class="form-label" style="color:#5f6b6d; font-weight:500;">End Date</label>
+        <input asp-for="EndDate" type="date" class="form-control" />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100" style="border-radius: 25px; font-weight: 500;">Filter</button>
+    </div>
+</form>
+
+<div id="exportButtonsContainer" class="mb-3 d-flex justify-content-center"></div>
+
+<table id="trialBalanceTable" class="table table-hover table-bordered shadow-sm" style="max-width: 900px; margin: 0 auto; border-radius: 12px; overflow: hidden;">
+    <thead style="background-color: #eef3f2; font-weight: 600; color: #344a4e;">
+        <tr>
+            <th>Account Code</th>
+            <th>Account Name</th>
+            <th>Account Type</th>
+            <th class="text-end">Total Debit</th>
+            <th class="text-end">Total Credit</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Entries != null && Model.Entries.Any())
+        {
+            decimal grandTotalDebit = 0;
+            decimal grandTotalCredit = 0;
+
+            foreach (var entry in Model.Entries)
+            {
+                grandTotalDebit += entry.TotalDebit;
+                grandTotalCredit += entry.TotalCredit;
+
+                <tr>
+                    <td>@(entry.AccountCode ?? "-")</td>
+                    <td>@(entry.AccountName ?? "-")</td>
+                    <td>@(entry.AccountType ?? "-")</td>
+                    <td class="text-end">@entry.TotalDebit.ToString("N2")</td>
+                    <td class="text-end">@entry.TotalCredit.ToString("N2")</td>
+                </tr>
+            }
+        }
+        else
+        {
+            <!-- No rows rendered here -->
+        }
+    </tbody>
+    <tfoot>
+        <tr style="font-weight: 600; background-color: #f4f6f5;">
+            <td colspan="3" class="text-end">Grand Total</td>
+            <td class="text-end">
+                @(Model.Entries != null ? Model.Entries.Sum(e => e.TotalDebit).ToString("N2") : "0.00")
+            </td>
+            <td class="text-end">
+                @(Model.Entries != null ? Model.Entries.Sum(e => e.TotalCredit).ToString("N2") : "0.00")
+            </td>
+        </tr>
+    </tfoot>
+</table>
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #7a9e9f;
+            --bg-light: #f9fbfc;
+            --border-color: #d6dede;
+            --text-main: #344a4e;
+            --text-muted: #5f6b6d;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+            padding: 0.4rem 1.2rem;
+        }
+
+            .btn-primary:hover {
+                background-color: #658c8e;
+            }
+
+        table.table-hover tbody tr:hover {
+            background-color: var(--bg-light);
+        }
+
+        .dt-buttons .btn {
+            border-radius: 25px;
+            font-weight: 500;
+            padding: 0.35rem 1rem;
+            margin-right: 0.5rem;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            background-color: transparent;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            .dt-buttons .btn:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#trialBalanceTable').DataTable({
+                dom: 'Bfrtip',
+                paging: false,
+                searching: false,
+                info: false,
+                autoWidth: false,
+                responsive: true,
+                language: {
+                    emptyTable: "No entries found for selected date range."
+                },
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Trial Balance Report - @Model.StartDate.ToString("yyyy-MM-dd") to @Model.EndDate.ToString("yyyy-MM-dd")',
+                        className: 'btn btn-outline-primary me-2'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Trial Balance Report - @Model.StartDate.ToString("yyyy-MM-dd") to @Model.EndDate.ToString("yyyy-MM-dd") ',
+                        className: 'btn btn-outline-danger me-2'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Trial Balance Report - @Model.StartDate.ToString("yyyy-MM-dd") to @Model.EndDate.ToString("yyyy-MM-dd")',
+                        className: 'btn btn-outline-secondary'
+                    }
+                ],
+                initComplete: function () {
+                    var btns = $('.dt-buttons');
+                    $('#exportButtonsContainer').append(btns);
+                }
+            });
+        });
+    </script>
+}

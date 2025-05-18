@@ -23,6 +23,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddTransient<ChartOfAccountService>();
 builder.Services.AddTransient<VoucherTypeService>();
 builder.Services.AddTransient<VoucherService>();
+builder.Services.AddTransient<ReportService>();
 
 
 var app = builder.Build();
