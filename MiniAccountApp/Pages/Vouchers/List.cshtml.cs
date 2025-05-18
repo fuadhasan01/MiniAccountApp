@@ -4,9 +4,11 @@ using MiniAccountApp.Services;  // your services namespace
 using System.Collections.Generic;
 using System;
 using MiniAccountApp.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiniAccountApp.Pages.Vouchers
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class ListModel : PageModel
     {
         private readonly VoucherTypeService _voucherTypeService;

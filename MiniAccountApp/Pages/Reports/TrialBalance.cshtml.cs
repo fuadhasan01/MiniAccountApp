@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniAccountApp.Models;
 using MiniAccountApp.Data;
-using Microsoft.AspNetCore.Mvc; // or wherever your ReportService is
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization; // or wherever your ReportService is
 
 namespace MiniAccountApp.Pages.Reports
 {
+    [Authorize(Roles = "Admin,Accountant,Viewer")]
     public class TrialBalanceModel : PageModel
     {
         private readonly ReportService _reportService;

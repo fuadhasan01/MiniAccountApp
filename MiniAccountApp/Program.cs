@@ -24,6 +24,7 @@ builder.Services.AddTransient<ChartOfAccountService>();
 builder.Services.AddTransient<VoucherTypeService>();
 builder.Services.AddTransient<VoucherService>();
 builder.Services.AddTransient<ReportService>();
+builder.Services.AddTransient<RolePageAccessService>();
 
 
 var app = builder.Build();

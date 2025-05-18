@@ -8,9 +8,11 @@ using MiniAccountApp.Models;
 using MiniAccountApp.Services;
 using Microsoft.Data.SqlClient;
 using System.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiniAccountApp.Pages.ChartOfAccounts
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class CreateModel : PageModel
     {
         private readonly ChartOfAccountService _service;

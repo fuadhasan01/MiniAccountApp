@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniAccountApp.Data;
@@ -6,6 +7,7 @@ using System;
 
 namespace MiniAccountApp.Pages.VoucherTypes
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class EditModel : PageModel
     {
         private readonly VoucherTypeService _voucherTypeService;

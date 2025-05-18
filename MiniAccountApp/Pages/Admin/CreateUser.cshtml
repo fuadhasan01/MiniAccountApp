@@ -4,7 +4,8 @@
     ViewData["Title"] = "Create User";
 }
 
-<h2>Create New User</h2>
+<h2 class="mb-4 text-center fw-semibold text-primary">Create New User</h2>
+
 @if (TempData["ErrorMessage"] != null)
 {
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -13,31 +14,97 @@
     </div>
 }
 
-<form method="post" novalidate>
-    <div class="mb-3">
-        <label asp-for="Input.Email" class="form-label"></label>
-        <input asp-for="Input.Email" class="form-control" />
-        <span asp-validation-for="Input.Email" class="text-danger"></span>
+<form method="post" novalidate class="mx-auto" style="max-width:400px;">
+    <div class="mb-4">
+        <label asp-for="Input.Email" class="form-label fw-semibold"></label>
+        <input asp-for="Input.Email" class="form-control shadow-sm border-0 rounded-3" placeholder="Enter email" />
+        <span asp-validation-for="Input.Email" class="text-danger small"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="Input.Password" class="form-label"></label>
-        <input asp-for="Input.Password" class="form-control" />
-        <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+    <div class="mb-4">
+        <label asp-for="Input.Password" class="form-label fw-semibold"></label>
+        <input asp-for="Input.Password" type="password" class="form-control shadow-sm border-0 rounded-3" placeholder="Enter password" />
+        <span asp-validation-for="Input.Password" class="text-danger small"></span>
     </div>
-    <div class="mb-3">
-        <label asp-for="Input.SelectedRole" class="form-label">Role</label>
-        <select asp-for="Input.SelectedRole" class="form-select">
+
+    <div class="mb-4">
+        <label asp-for="Input.SelectedRole" class="form-label fw-semibold">Role</label>
+        <select asp-for="Input.SelectedRole" class="form-select shadow-sm border-0 rounded-3">
             <option value="">-- Select Role --</option>
             @foreach (var role in Model.Roles)
             {
                 <option value="@role">@role</option>
             }
         </select>
-        <span asp-validation-for="Input.SelectedRole" class="text-danger"></span>
+        <span asp-validation-for="Input.SelectedRole" class="text-danger small"></span>
     </div>
-    <button type="submit" class="btn btn-success">Create User</button>
-    <a asp-page="Users" class="btn btn-secondary ms-2">Cancel</a>
+
+    <div class="d-flex justify-content-between align-items-center">
+        <button type="submit" class="btn btn-primary px-4 rounded-pill fw-semibold shadow-sm">Create User</button>
+        <a asp-page="Users" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold">Cancel</a>
+    </div>
 </form>
+
+@section Styles {
+    <style>
+        /* Root color variables */
+        :root {
+            --primary-color: #4a90e2;
+            --primary-hover: #3c7acb;
+            --input-bg: #f8fafc;
+            --input-border: #dbe4ef;
+            --input-focus: #4a90e2;
+            --error-color: #dc3545;
+        }
+
+        h2 {
+            color: var(--primary-color);
+        }
+
+        /* Inputs */
+        .form-control, .form-select {
+            background-color: var(--input-bg);
+            border: 1.5px solid var(--input-border);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .form-control:focus, .form-select:focus {
+                border-color: var(--input-focus);
+                box-shadow: 0 0 6px rgba(74, 144, 226, 0.4);
+                outline: none;
+                background-color: white;
+            }
+
+        /* Buttons */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            box-shadow: 0 4px 8px rgba(74, 144, 226, 0.3);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .btn-primary:hover {
+                background-color: var(--primary-hover);
+                box-shadow: 0 6px 12px rgba(60, 122, 203, 0.5);
+            }
+
+        .btn-outline-secondary {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            .btn-outline-secondary:hover {
+                background-color: var(--primary-color);
+                color: white;
+            }
+
+        /* Validation error text */
+        .text-danger {
+            color: var(--error-color) !important;
+        }
+    </style>
+}
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

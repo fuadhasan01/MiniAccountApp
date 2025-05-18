@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace MiniAccountApp.Pages.ChartOfAccounts
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class ListModel : PageModel
     {
         private readonly IConfiguration _configuration;

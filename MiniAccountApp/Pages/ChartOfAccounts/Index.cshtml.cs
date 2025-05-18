@@ -9,9 +9,11 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using MiniAccountApp.Services;
 using System.Configuration;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiniAccountApp.Pages.ChartOfAccounts
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class IndexModel : PageModel
     {
         private readonly ChartOfAccountService _service;

@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
@@ -7,6 +8,8 @@ using System.Collections.Generic;
 
 namespace MiniAccountApp.Pages.VoucherTypes
 {
+    [Authorize(Roles = "Admin,Accountant")]
+    [Authorize(Roles = "Admin,Accountant")]
     public class IndexModel : PageModel
     {
         private readonly ILogger<IndexModel> _logger;

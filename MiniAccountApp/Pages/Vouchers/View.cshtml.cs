@@ -5,9 +5,11 @@ using MiniAccountApp.Models;
 using System;
 using System.Collections.Generic;
 using MiniAccountApp.Data;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiniAccountApp.Pages.Vouchers
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class ViewModel : PageModel
     {
         private readonly VoucherService _voucherService;

@@ -4,20 +4,95 @@
     ViewData["Title"] = "Edit User Roles";
 }
 
-<h2>Edit Roles for User</h2>
+<h2 class="mb-4 text-center" style="color: var(--text-color); font-weight: 600;">Edit Roles for User</h2>
 
-<form method="post">
+<form method="post" style="max-width: 400px; margin: 0 auto;">
     <input type="hidden" asp-for="UserId" />
-    <div class="form-group">
+
+    <div class="mb-4">
         @for (int i = 0; i < Model.Roles.Count; i++)
         {
-            <div class="form-check">
-                <input asp-for="Roles[i].IsSelected" class="form-check-input" />
-                <label class="form-check-label">@Model.Roles[i].RoleName</label>
+            <div class="form-check mb-3">
+                <input asp-for="Roles[i].IsSelected" class="form-check-input" id="roleCheck_@i" />
+                <label class="form-check-label fw-semibold" for="roleCheck_@i">@Model.Roles[i].RoleName</label>
                 <input type="hidden" asp-for="Roles[i].RoleName" />
             </div>
         }
     </div>
-    <button type="submit" class="btn btn-primary mt-2">Save</button>
-    <a asp-page="Users" class="btn btn-secondary mt-2">Cancel</a>
+
+    <div class="d-flex justify-content-between">
+        <button type="submit" class="btn btn-primary px-4 rounded-pill fw-semibold shadow-sm">Save</button>
+        <a asp-page="Users" class="btn btn-secondary px-4 rounded-pill fw-semibold">Cancel</a>
+    </div>
 </form>
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #7a9e9f;
+            --text-color: #2c3e50;
+            --border-color: #cfd8dc;
+            --btn-secondary-bg: #f0f0f0;
+            --btn-secondary-hover: #d9d9d9;
+        }
+
+        h2 {
+            color: var(--text-color);
+        }
+
+        .form-check-input {
+            width: 1.25rem;
+            height: 1.25rem;
+            border-radius: 0.25rem;
+            border: 1.5px solid var(--border-color);
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            .form-check-input:checked {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+                box-shadow: 0 0 6px rgba(122, 158, 159, 0.5);
+            }
+
+        .form-check-label {
+            color: var(--text-color);
+            font-size: 1rem;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        button.btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(122, 158, 159, 0.3);
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+            button.btn-primary:hover {
+                background-color: #658c8e;
+                box-shadow: 0 6px 12px rgba(101, 140, 142, 0.5);
+            }
+
+        a.btn-secondary {
+            background-color: var(--btn-secondary-bg);
+            color: var(--text-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+            text-decoration: none;
+            text-align: center;
+            display: inline-block;
+            padding-top: 0.375rem;
+            padding-bottom: 0.375rem;
+        }
+
+            a.btn-secondary:hover {
+                background-color: var(--btn-secondary-hover);
+                color: var(--text-color);
+                text-decoration: none;
+            }
+    </style>
+}

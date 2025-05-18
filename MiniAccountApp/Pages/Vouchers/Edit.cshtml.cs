@@ -6,9 +6,11 @@ using MiniAccountApp.Data;
 using System.Data.SqlClient;
 using System.Data;
 using MiniAccountApp.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MiniAccountApp.Pages.Vouchers
 {
+    [Authorize(Roles = "Admin,Accountant")]
     public class EditModel : PageModel
     {
         private readonly IConfiguration _config;

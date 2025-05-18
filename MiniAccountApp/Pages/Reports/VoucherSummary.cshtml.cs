@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniAccountApp.Data;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 
 namespace MiniAccountApp.Pages.Reports
 {
+    [Authorize(Roles = "Admin,Accountant,Viewer")]
     public class VoucherSummaryModel : PageModel
     {
         private readonly VoucherService _voucherService;
