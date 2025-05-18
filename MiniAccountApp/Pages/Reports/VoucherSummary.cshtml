@@ -1,0 +1,191 @@
+﻿@page
+@model MiniAccountApp.Pages.Reports.VoucherSummaryModel
+@{
+    ViewData["Title"] = "Voucher Summary Report";
+}
+
+<h2 class="text-center mb-4" style="color:#344a4e; font-weight:600;">
+    Voucher Summary Report
+</h2>
+
+<form method="post" class="row g-3 mb-3 justify-content-center" style="max-width: 600px; margin:auto;">
+    <div class="col-md-5">
+        <label asp-for="StartDate" class="form-label">Start Date</label>
+        <input asp-for="StartDate" type="date" class="form-control" />
+    </div>
+    <div class="col-md-5">
+        <label asp-for="EndDate" class="form-label">End Date</label>
+        <input asp-for="EndDate" type="date" class="form-control" />
+    </div>
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary" style="border-radius: 25px; font-weight: 500;">
+            Filter
+        </button>
+    </div>
+    <div id="exportButtonsContainer" class="mb-3 d-flex justify-content-center"></div>
+</form>
+
+<div class="table table-hover table-bordered shadow-sm" style="max-width: 900px; margin: 0 auto; border-radius: 12px; overflow: hidden;">
+    <table id="voucherSummaryTable" class="table table-hover table-bordered align-middle mb-0" style="min-width: 860px;">
+        <thead class="table-light text-center" style="background-color: #eef3f2; font-weight: 600; color: #344a4e;">
+            <tr>
+                <th>Voucher No</th>
+                <th>Date</th>
+                <th>Voucher Type</th>
+                <th class="text-end">Total Debit</th>
+                <th class="text-end">Total Credit</th>
+                <th>Remarks</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (!Model.Summaries.Any())
+            {
+                <tr>
+                    <td colspan="6" class="text-center text-muted fst-italic py-4">No vouchers found for the selected period.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model.Summaries)
+                {
+                    <tr class="text-center align-middle">
+                        <td>@item.VoucherNo</td>
+                        <td>@item.VoucherDate.ToString("yyyy-MM-dd")</td>
+                        <td>@item.VoucherTypeName</td>
+                        <td class="text-end fw-semibold text-success">@item.TotalDebit.ToString("N2")</td>
+                        <td class="text-end fw-semibold text-danger">@item.TotalCredit.ToString("N2")</td>
+                        <td class="text-start px-3" style="max-width: 250px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                            @item.Remarks
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot class="font-weight: 600; background-color: #f4f6f5;">
+            <tr>
+                <td colspan="3" class="text-end">Grand Total</td>
+                <td class="text-end text-success">@Model.Summaries.Sum(x => x.TotalDebit).ToString("N2")</td>
+                <td class="text-end text-danger">@Model.Summaries.Sum(x => x.TotalCredit).ToString("N2")</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+@section Styles {
+    <style>
+        :root {
+            --primary-color: #7a9e9f;
+            --border-color: #d6dede;
+            --text-main: #344a4e;
+            --text-muted: #5f6b6d;
+            --bg-light: #f9fbfc;
+        }
+
+        h2.mb-4 {
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        form label {
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            transition: border-color 0.2s ease;
+        }
+
+            .form-control:focus {
+                border-color: var(--primary-color);
+                box-shadow: none;
+            }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 25px;
+            font-weight: 500;
+            padding: 0.5rem 1.25rem;
+            transition: background-color 0.3s ease;
+        }
+
+            .btn-primary:hover,
+            .btn-primary:focus {
+                background-color: #658c8e;
+            }
+
+        table.table-hover tbody tr:hover {
+            background-color: var(--bg-light);
+            transition: background-color 0.2s ease;
+        }
+
+        /* Export buttons styling */
+        .dt-buttons .btn {
+            border-radius: 25px !important;
+            font-weight: 500 !important;
+            padding: 0.35rem 1rem !important;
+            margin-left: 0.4rem !important;
+            font-size: 0.9rem !important;
+            border: 1.8px solid var(--primary-color) !important;
+            color: var(--primary-color) !important;
+            background-color: transparent !important;
+            cursor: pointer;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+            .dt-buttons .btn:hover,
+            .dt-buttons .btn:focus {
+                background-color: var(--primary-color) !important;
+                color: white !important;
+            }
+    </style>
+}
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.print.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            var table = $('#voucherSummaryTable').DataTable({
+                dom: 'Bfrtip',
+                paging: false,
+                searching: false,
+                info: false,
+                autoWidth: false,
+                responsive: true,
+                buttons: [
+                    {
+                        extend: 'excelHtml5',
+                        title: 'Voucher Summary Report - @Model.StartDate?.ToString("yyyy-MM-dd") to @Model.EndDate?.ToString("yyyy-MM-dd")',
+                        className: 'btn btn-outline-primary'
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Voucher Summary Report - @Model.StartDate?.ToString("yyyy-MM-dd") to @Model.EndDate?.ToString("yyyy-MM-dd")',
+                        className: 'btn btn-outline-danger'
+                    },
+                    {
+                        extend: 'print',
+                        title: 'Voucher Summary Report - @Model.StartDate?.ToString("yyyy-MM-dd") to @Model.EndDate?.ToString("yyyy-MM-dd")',
+                        className: 'btn btn-outline-secondary'
+                    }
+                ],
+                initComplete: function () {
+                    var btns = $('.dt-buttons');
+                    $('#exportButtonsContainer').append(btns);
+                }
+            });
+        });
+    </script>
+}

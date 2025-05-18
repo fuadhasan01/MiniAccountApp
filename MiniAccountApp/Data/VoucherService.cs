@@ -184,6 +184,36 @@ namespace MiniAccountApp.Data
             return list;
         }
 
+        public List<VoucherSummaryDto> GetVoucherSummary(DateTime? startDate, DateTime? endDate)
+        {
+            var list = new List<VoucherSummaryDto>();
+            using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
+            using var cmd = new SqlCommand("sp_ManageVouchers", conn);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@Action", "SUMMARY");
+            cmd.Parameters.AddWithValue("@StartDate", (object)startDate ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("@EndDate", (object)endDate ?? DBNull.Value);
+
+            conn.Open();
+            using var reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                list.Add(new VoucherSummaryDto
+                {
+                    VoucherId = reader.GetGuid(reader.GetOrdinal("VoucherId")),
+                    VoucherNo = reader.GetString(reader.GetOrdinal("VoucherNo")),
+                    VoucherDate = reader.GetDateTime(reader.GetOrdinal("VoucherDate")),
+                    VoucherTypeName = reader.GetString(reader.GetOrdinal("VoucherTypeName")),
+                    TotalDebit = reader.GetDecimal(reader.GetOrdinal("TotalDebit")),
+                    TotalCredit = reader.GetDecimal(reader.GetOrdinal("TotalCredit")),
+                    Remarks = reader.IsDBNull(reader.GetOrdinal("Remarks")) ? "" : reader.GetString(reader.GetOrdinal("Remarks"))
+                });
+            }
+            return list;
+        }
+
+
 
     }
 }
