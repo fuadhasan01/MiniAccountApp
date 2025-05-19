@@ -119,7 +119,7 @@ Make sure you have the following software installed:
 
 - **SQL Server** (or SQL Server Express)
 - **.NET 8 SDK** (or later)
-- **SQL Server Management Studio (SSMS)** (optional, but recommended for database restoration)
+- **SQL Server Management Studio (SSMS)** (2022)
 
 ---
 
