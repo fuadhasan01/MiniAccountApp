@@ -21,7 +21,6 @@ namespace MiniAccountApp.Pages.VoucherTypes
 
         public void OnGet()
         {
-            // Nothing to load initially for create
         }
 
         public IActionResult OnPost()

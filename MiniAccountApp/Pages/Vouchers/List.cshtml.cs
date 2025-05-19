@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using MiniAccountApp.Services;  // your services namespace
+using MiniAccountApp.Services;
 using System.Collections.Generic;
 using System;
 using MiniAccountApp.Data;
@@ -29,8 +29,7 @@ namespace MiniAccountApp.Pages.Vouchers
 
         public void OnGet()
         {
-            // Load Voucher Types
-            var types = _voucherTypeService.GetAllVoucherTypes(); // List<VoucherType>
+            var types = _voucherTypeService.GetAllVoucherTypes(); 
             VoucherTypes = new List<SelectListItem>();
             foreach (var t in types)
             {
@@ -41,7 +40,6 @@ namespace MiniAccountApp.Pages.Vouchers
                 });
             }
 
-            // Load Chart of Accounts
             var accounts = _coaService.GetAllAccountsAsync().GetAwaiter().GetResult(); // List<ChartOfAccount>
             AccountList = new List<SelectListItem>();
             foreach (var a in accounts)
@@ -53,8 +51,6 @@ namespace MiniAccountApp.Pages.Vouchers
                 });
             }
 
-            // Load vouchers - you can call your VoucherService or sp_ManageVouchers GETALL here
-            // (Assuming VoucherService has a method GetAllVouchers returning List<VoucherListDto>)
             Vouchers = _voucherService.GetAllVouchers();
         }
     }

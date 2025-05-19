@@ -47,7 +47,6 @@ namespace MiniAccountApp.Models
 
 
 
-        // These properties are used for view purposes only
         public List<ChartOfAccount> Children { get; set; } = new();
         public string? ParentAccountName { get; set; }
 

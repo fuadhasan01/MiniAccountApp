@@ -6,7 +6,6 @@
 
 <h2 class="mb-4 text-center">Voucher Details</h2>
 
-<!-- Export buttons container -->
 <div id="exportButtonsContainer" class="d-flex justify-content-center mb-3"></div>
 
 <div class="card p-4 mb-4" style="max-width: 800px; margin: 0 auto; border-radius: 12px; border: 1px solid #d6dede; background-color: #f9fbfc;">
@@ -77,13 +76,11 @@
                 background-color: #658c8e;
             }
 
-        /* Buttons container style */
         #exportButtonsContainer .dt-buttons {
             display: inline-flex;
             gap: 0.5rem;
         }
 
-        /* Style DataTables Buttons as Bootstrap outlines */
         .dt-button.btn {
             border-radius: 25px;
             font-weight: 500;
@@ -106,10 +103,8 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
 
-    <!-- DataTables core -->
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
-    <!-- Buttons extension and dependencies -->
     <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
@@ -142,7 +137,6 @@
                     }
                 ],
                 initComplete: function () {
-                    // Move buttons container into your #exportButtonsContainer div, centered below heading
                     var btns = $('.dt-buttons');
                     $('#exportButtonsContainer').append(btns);
                 }

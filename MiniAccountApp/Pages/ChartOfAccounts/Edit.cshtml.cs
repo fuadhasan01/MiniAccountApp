@@ -28,7 +28,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
             using var conn = new SqlConnection(connStr);
             await conn.OpenAsync();
 
-            // First query - get the account to edit
             ChartOfAccount account;
             using (var cmd = new SqlCommand("sp_ManageChartOfAccounts", conn))
             {
@@ -56,9 +55,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                 {
                     return NotFound();
                 }
-            } // Reader is disposed here
-
-            // Second query - get parent accounts
             var parents = new List<ChartOfAccount>();
             using (var parentCmd = new SqlCommand("sp_ManageChartOfAccounts", conn))
             {
@@ -110,7 +106,7 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
             cmd.Parameters.AddWithValue("@AccountLevel", Account.AccountLevel);
             cmd.Parameters.AddWithValue("@IsActive", Account.IsActive ?? "");
             cmd.Parameters.AddWithValue("@AccountNature", Account.AccountNature ?? "");
-            cmd.Parameters.AddWithValue("@UpdatedBy", "system");  // Or your logged-in user
+            cmd.Parameters.AddWithValue("@UpdatedBy", "system");
             cmd.Parameters.AddWithValue("@Description", Account.Description ?? "");
 
             await cmd.ExecuteNonQueryAsync();

@@ -22,7 +22,7 @@ namespace MiniAccountApp.Pages.Vouchers
         }
 
         [BindProperty(SupportsGet = true)]
-        public Guid Id { get; set; }  // voucher id from query or route
+        public Guid Id { get; set; }  
 
         public VoucherCreateDto Voucher { get; set; }
         public Dictionary<Guid, string> AccountNames { get; set; } = new();
@@ -36,7 +36,6 @@ namespace MiniAccountApp.Pages.Vouchers
             if (Voucher == null)
                 return RedirectToPage("/Vouchers/List");
 
-            // Load account names for entries
             var accounts = _coaService.GetAllAccountsAsync().GetAwaiter().GetResult();
             foreach (var a in accounts)
             {

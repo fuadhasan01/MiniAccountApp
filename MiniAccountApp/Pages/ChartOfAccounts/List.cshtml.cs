@@ -22,7 +22,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
         public List<ChartOfAccount> Accounts { get; set; } = new();
         public List<string> AccountTypes { get; set; } = new() { "Assets", "Liabilities", "Equity", "Income", "Expense" };
 
-        // Filters bound from query string
         public string FilterAccountType { get; set; }
         public string FilterAccountName { get; set; }
 
@@ -64,7 +63,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                 acc.ParentAccountName = acc.ParentAccountId.HasValue && accountDict.ContainsKey(acc.ParentAccountId.Value)
                     ? accountDict[acc.ParentAccountId.Value].AccountName : "";
 
-            // Manual filtering without LINQ
             var filteredAccounts = new List<ChartOfAccount>();
             foreach (var acc in tempAccounts)
             {
@@ -76,7 +74,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                     filteredAccounts.Add(acc);
             }
 
-            // Order accounts by fixed AccountType order manually
             var order = new List<string> { "Assets", "Liabilities", "Equity", "Income", "Expense" };
             var orderedAccounts = new List<ChartOfAccount>();
             foreach (var type in order)

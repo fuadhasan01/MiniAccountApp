@@ -2,8 +2,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using MiniAccountApp.Models;
 using MiniAccountApp.Data;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization; // or wherever your ReportService is
-
+using Microsoft.AspNetCore.Authorization; 
 namespace MiniAccountApp.Pages.Reports
 {
     [Authorize(Roles = "Admin,Accountant,Viewer")]

@@ -19,21 +19,18 @@ namespace MiniAccountApp.Data
             using var conn = new SqlConnection(_configuration.GetConnectionString("DefaultConnection"));
             using var cmd = new SqlCommand("sp_ManageVouchers", conn);
             cmd.CommandType = CommandType.StoredProcedure;
-            // Required Parameters
             cmd.Parameters.AddWithValue("@Action", "CREATE");
             cmd.Parameters.AddWithValue("@VoucherTypeId", dto.VoucherTypeId);
             cmd.Parameters.AddWithValue("@VoucherDate", dto.VoucherDate);
             cmd.Parameters.AddWithValue("@Remarks", dto.Remarks ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@CreatedBy", "system");
 
-            // OUTPUT Parameter for VoucherNo
             var voucherNoParam = new SqlParameter("@VoucherNo", SqlDbType.NVarChar, 50)
             {
                 Direction = ParameterDirection.Output
             };
             cmd.Parameters.Add(voucherNoParam);
 
-            // TVP: Voucher Entries
             var entryTable = new DataTable();
             entryTable.Columns.Add("AccountId", typeof(Guid));
             entryTable.Columns.Add("Particulars", typeof(string));
@@ -54,11 +51,9 @@ namespace MiniAccountApp.Data
             tvpParam.SqlDbType = SqlDbType.Structured;
             tvpParam.TypeName = "dbo.VoucherEntryTableType";
 
-            // Execute
             conn.Open();
             cmd.ExecuteNonQuery();
 
-            // Get the generated Voucher No
             string newVoucherNo = voucherNoParam.Value?.ToString();
             return newVoucherNo ?? string.Empty;
         }
@@ -118,7 +113,6 @@ namespace MiniAccountApp.Data
             cmd.Parameters.AddWithValue("@Remarks", dto.Remarks ?? (object)DBNull.Value);
             cmd.Parameters.AddWithValue("@UpdatedBy", "system");
 
-            // Entries
             var table = new DataTable();
             table.Columns.Add("AccountId", typeof(Guid));
             table.Columns.Add("Particulars", typeof(string));

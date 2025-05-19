@@ -11,14 +11,12 @@
     <div class="accordion" id="accordion_@nodeId">
         <div class="accordion-item border-0 d-flex align-items-center justify-content-between">
             <h2 class="accordion-header flex-grow-1 d-flex align-items-center" id="@headingId">
-                <!-- Buttons before toggle icon -->
                 <div class="btn-group me-2" role="group" aria-label="Account actions">
                     <a asp-page="./Edit" asp-route-id="@Model.AccountId" class="btn btn-sm btn-outline-primary" title="Edit">
                         <i class="bi bi-pencil"></i>
                     </a>
                 </div>
 
-                <!-- Accordion toggle button -->
                 <button class="accordion-button collapsed p-1 ps-3 bg-white text-secondary fw-normal flex-grow-1"
                         type="button" data-bs-toggle="collapse" data-bs-target="#@collapseId" aria-expanded="false" aria-controls="@collapseId"
                         style="font-size: 0.9rem; box-shadow:none;">

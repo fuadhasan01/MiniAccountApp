@@ -25,25 +25,21 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
             _configuration = configuration;
         }
 
-        // Key: AccountType, Value: List of top-level accounts with children built
         public Dictionary<string, List<ChartOfAccount>> AccountsByType { get; set; } = new();
 
         public async Task OnGetAsync()
         {
             var allAccounts = await _service.GetAllAccountsAsync();
 
-            // Build dictionary by AccountType
             var grouped = new Dictionary<string, List<ChartOfAccount>>();
 
-            // First, create a lookup dictionary for all accounts by AccountId
             var lookup = new Dictionary<Guid, ChartOfAccount>();
             foreach (var acc in allAccounts)
             {
                 lookup[acc.AccountId] = acc;
-                acc.Children = new List<ChartOfAccount>(); // ensure children list
+                acc.Children = new List<ChartOfAccount>(); 
             }
 
-            // Then, assign children to parents
             foreach (var acc in allAccounts)
             {
                 if (acc.ParentAccountId.HasValue && lookup.ContainsKey(acc.ParentAccountId.Value))
@@ -52,7 +48,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                 }
             }
 
-            // Now, gather top-level accounts (no parent)
             var topLevelAccounts = new List<ChartOfAccount>();
             foreach (var acc in allAccounts)
             {
@@ -62,7 +57,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                 }
             }
 
-            // Group top-level accounts by AccountType
             foreach (var acc in topLevelAccounts)
             {
                 if (!grouped.ContainsKey(acc.AccountType))
@@ -72,7 +66,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                 grouped[acc.AccountType].Add(acc);
             }
 
-            // Sort groups by the standard order
             var order = new List<string> { "Assets", "Liabilities", "Equity", "Income", "Expense" };
             var orderedGroups = new Dictionary<string, List<ChartOfAccount>>();
             foreach (var key in order)
@@ -92,7 +85,6 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
             using var conn = new SqlConnection(connStr);
             await conn.OpenAsync();
 
-            // Check if account has children: SELECT COUNT(*) FROM ChartOfAccounts WHERE ParentAccountId = @id
             using var checkCmd = new SqlCommand("SELECT COUNT(*) FROM ChartOfAccounts WHERE ParentAccountId = @ParentId", conn);
             checkCmd.Parameters.AddWithValue("@ParentId", id);
             int childCount = (int)await checkCmd.ExecuteScalarAsync();
@@ -100,11 +92,10 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
             if (childCount > 0)
             {
                 ModelState.AddModelError(string.Empty, "Cannot delete account because it has child accounts.");
-                await OnGetAsync(); // reload data to redisplay
+                await OnGetAsync(); 
                 return Page();
             }
 
-            // Delete account using stored procedure
             using var deleteCmd = new SqlCommand("sp_ManageChartOfAccounts", conn);
             deleteCmd.CommandType = CommandType.StoredProcedure;
             deleteCmd.Parameters.AddWithValue("@Action", "DELETE");

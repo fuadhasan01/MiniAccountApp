@@ -12,7 +12,6 @@ namespace MiniAccountApp.Data
             _connectionString = config.GetConnectionString("DefaultConnection");
         }
 
-        // Get all pages stored in ApplicationPages table
         public async Task<List<string>> GetAllPagesAsync()
         {
             var pages = new List<string>();
@@ -66,7 +65,6 @@ namespace MiniAccountApp.Data
             await cmd.ExecuteNonQueryAsync();
         }
 
-        // Optional: Add a new page to ApplicationPages table
         public async Task AddNewPageAsync(string pageUrl)
         {
             using var conn = new SqlConnection(_connectionString);

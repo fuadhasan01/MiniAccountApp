@@ -34,7 +34,6 @@ namespace MiniAccountApp.Pages.Vouchers
 
         public IActionResult OnGet(Guid id)
         {
-            // 1. Dropdown Bind
             VoucherTypes = _voucherTypeService.GetAllVoucherTypes()
                 .Select(v => new SelectListItem { Value = v.VoucherTypeId.ToString(), Text = v.TypeName }).ToList();
 
@@ -45,7 +44,6 @@ namespace MiniAccountApp.Pages.Vouchers
                     Text = $"{a.AccountCode} - {a.AccountName}"
                 }).ToList();
 
-            // 2. Get Voucher by ID
             Voucher = _voucherService.GetVoucherById(id);
             if (Voucher == null)
             {

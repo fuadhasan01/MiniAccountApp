@@ -125,7 +125,6 @@
             calculateTotals();
             let entryIndex = 1;
 
-            // Initial Select2 setup
             $('.account-select').select2({
                 placeholder: "-- Select Account --",
                 allowClear: true,
@@ -136,7 +135,6 @@
                 const template = $('#entry-template').html();
                 const $entry = $(template);
 
-                // Update name attributes
                 $entry.find('select, input').each(function () {
                     const $el = $(this);
                     let name = "";
@@ -151,7 +149,6 @@
 
                 $('#entry-list').append($entry);
 
-                // Re-initialize Select2
                 $entry.find('.account-select').select2({
                     placeholder: "-- Select Account --",
                     allowClear: true,
@@ -162,7 +159,6 @@
                 calculateTotals();
             });
 
-            // Remove entry
             $('#entry-list').on('click', '.remove-entry', function () {
                 if ($('.entry-item').length > 1) {
                     $(this).closest('.entry-item').remove();
@@ -178,7 +174,7 @@
             const totalCredit = parseFloat($('#total-credit').text()) || 0;
 
             if (totalDebit !== totalCredit) {
-                e.preventDefault(); // Stop form submission
+                e.preventDefault(); 
                 alert("❗ Total Debit and Credit must be equal.");
                 return false;
             }

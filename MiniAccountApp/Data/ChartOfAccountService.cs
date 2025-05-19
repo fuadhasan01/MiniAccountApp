@@ -51,7 +51,6 @@ namespace MiniAccountApp.Services
 
             if (parentAccountId == null)
             {
-                // Get max root AccountCode (no parent)
                 var cmd = new SqlCommand("SELECT MAX(CAST(AccountCode AS INT)) FROM ChartOfAccounts WHERE ParentAccountId IS NULL", conn);
                 var result = await cmd.ExecuteScalarAsync();
                 int maxCode = result != DBNull.Value ? Convert.ToInt32(result) : 0;
@@ -59,7 +58,6 @@ namespace MiniAccountApp.Services
             }
             else
             {
-                // Get parent's AccountCode
                 var cmdParent = new SqlCommand("SELECT AccountCode FROM ChartOfAccounts WHERE AccountId = @ParentAccountId", conn);
                 cmdParent.Parameters.AddWithValue("@ParentAccountId", parentAccountId);
                 var parentCodeObj = await cmdParent.ExecuteScalarAsync();
@@ -69,7 +67,6 @@ namespace MiniAccountApp.Services
 
                 string parentCode = parentCodeObj.ToString();
 
-                // Get max child AccountCode that starts with parent's code
                 var cmdChild = new SqlCommand(
                     "SELECT MAX(CAST(AccountCode AS INT)) FROM ChartOfAccounts WHERE AccountCode LIKE @ParentCodePlus + '%' AND ParentAccountId = @ParentAccountId",
                     conn);
@@ -80,7 +77,6 @@ namespace MiniAccountApp.Services
 
                 if (maxChildCodeObj == DBNull.Value || maxChildCodeObj == null)
                 {
-                    // No child yet - first child code = parentCode + "01"
                     return parentCode + "01";
                 }
                 else
@@ -91,7 +87,6 @@ namespace MiniAccountApp.Services
             }
         }
 
-        // Optional helper methods to get account list, get by id, etc.
         public async Task<List<ChartOfAccount>> GetAllAccountsAsync()
         {
             var accounts = new List<ChartOfAccount>();
@@ -166,7 +161,7 @@ namespace MiniAccountApp.Services
             }
             else
             {
-                return null;  // Account not found
+                return null;  
             }
         }
     }

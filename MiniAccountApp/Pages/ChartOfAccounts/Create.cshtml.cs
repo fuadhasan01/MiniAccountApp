@@ -82,14 +82,12 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
 
-                await OnGetAsync();  // reload parent accounts for dropdown if error
+                await OnGetAsync();
                 return Page();
             }
 
-            // Set CreatedBy to current user or system default
             ChartOfAccount.CreatedBy = User.Identity?.Name ?? "system";
 
-            // Calculate AccountLevel based on parent
             if (ChartOfAccount.ParentAccountId.HasValue)
             {
                 var parent = await _service.GetAccountByIdAsync(ChartOfAccount.ParentAccountId.Value);
