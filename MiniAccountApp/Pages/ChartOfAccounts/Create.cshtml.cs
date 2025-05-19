@@ -9,6 +9,7 @@ using MiniAccountApp.Services;
 using Microsoft.Data.SqlClient;
 using System.Data;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 
 namespace MiniAccountApp.Pages.ChartOfAccounts
 {

@@ -1,5 +1,7 @@
 ﻿<!DOCTYPE html>
+
 <html lang="en">
+
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - MiniAccountApp</title>
@@ -54,6 +56,7 @@
             display: flex;
             flex-direction: column;
             overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .sidebar .nav-link,
@@ -63,6 +66,7 @@
             border-radius: 6px;
             transition: background-color 0.2s;
             font-size: 0.925rem;
+            white-space: nowrap;
         }
 
             .sidebar .nav-link:hover,
@@ -81,6 +85,7 @@
         .sidebar-title {
             font-size: 1.1rem;
             color: var(--primary-color);
+            white-space: nowrap;
         }
 
         .logout-section {
@@ -95,9 +100,9 @@
             box-sizing: border-box;
         }
 
-        /* Collapsed sidebar */
         .sidebar.collapsed {
             width: 70px;
+            overflow-x: visible;
         }
 
             .sidebar.collapsed .nav-link span,
@@ -107,6 +112,17 @@
             .sidebar.collapsed .bi-chevron-down {
                 display: none;
             }
+
+        .nav-scrollable {
+            flex-grow: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .nav-scrollable-content {
+            min-width: 240px;
+            width: 100%;
+        }
 
         .main-content {
             flex-grow: 1;
@@ -132,11 +148,29 @@
             padding: 0.75rem 1rem;
         }
 
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+            ::-webkit-scrollbar-thumb:hover {
+                background: #a8a8a8;
+            }
     </style>
 </head>
+
 <body>
     <div class="wrapper d-flex">
-        <!-- Sidebar -->
         <div class="sidebar" id="sidebar">
             <div class="d-flex justify-content-between align-items-center mt-2 mb-2 px-3">
                 <h5 class="mb-0 fw-bold sidebar-title me-2">MiniAccountApp</h5>
@@ -145,131 +179,134 @@
                 </button>
             </div>
             <div class="sidebar-inner d-flex flex-column">
-                <nav class="nav flex-column flex-grow-1 overflow-auto">
-                    <a class="nav-link submenu-link" asp-page="/Index" data-controller="Index" data-action="Index">
-                        <i class="bi bi-house-door me-2"></i><span>Home</span>
-                    </a>
+                <div class="nav-scrollable">
+                    <div class="nav-scrollable-content">
+                        <nav class="nav flex-column">
+                            <a class="nav-link submenu-link" asp-page="/Index" data-controller="Index" data-action="Index">
+                                <i class="bi bi-house-door me-2"></i><span>Home</span>
+                            </a>
 
-                    @if (User.Identity?.IsAuthenticated ?? false)
-                    {
-                        // Admin only menus
-                        if (User.IsInRole("Admin"))
-                        {
-                            <div class="nav-item">
-                                <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
-                                   href="#adminSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="adminSubmenu">
-                                    <span><i class="bi bi-shield-lock me-2"></i>Admin Panel</span>
-                                    <i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <div class="collapse ps-4" id="adminSubmenu">
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/Admin/Users"
-                                       data-controller="Admin" data-action="Users">
-                                        <i class="bi bi-person-plus me-2"></i> <span>Create User</span>
-                                    </a>
-                                </div>
-                            </div>
-                        }
+                            @if (User.Identity?.IsAuthenticated ?? false)
+                            {
+                                if (User.IsInRole("Admin"))
+                                {
+                                    <div class="nav-item">
+                                        <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
+                                           href="#adminSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="adminSubmenu">
+                                            <span><i class="bi bi-shield-lock me-2"></i>Admin Panel</span>
+                                            <i class="bi bi-chevron-down ms-auto"></i>
+                                        </a>
+                                        <div class="collapse ps-4" id="adminSubmenu">
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/Admin/Users"
+                                               data-controller="Admin" data-action="Users">
+                                                <i class="bi bi-person-plus me-2"></i> <span>Create User</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
 
-                        // Admin + Accountant menus
-                        if (User.IsInRole("Admin") || User.IsInRole("Accountant"))
-                        {
-                            <div class="nav-item">
-                                <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
-                                   href="#coaSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="coaSubmenu">
-                                    <span><i class="bi bi-bookmarks me-2"></i>Chart Of Accounts</span>
-                                    <i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <div class="collapse ps-4" id="coaSubmenu">
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/ChartOfAccounts/Create"
-                                       data-controller="ChartOfAccounts" data-action="Create">
-                                        <i class="bi bi-plus-circle me-2"></i> <span>Create New</span>
-                                    </a>
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/ChartOfAccounts/Index"
-                                       data-controller="ChartOfAccounts" data-action="HierarchyTree">
-                                        <i class="bi bi-diagram-3 me-2"></i> <span>COA Hierarchy Tree</span>
-                                    </a>
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/ChartOfAccounts/List"
-                                       data-controller="ChartOfAccounts" data-action="Index">
-                                        <i class="bi bi-list-columns me-2"></i> <span>COA List</span>
-                                    </a>
-                                </div>
-                            </div>
+                                // Admin + Accountant menus
+                                if (User.IsInRole("Admin") || User.IsInRole("Accountant"))
+                                {
+                                    <div class="nav-item">
+                                        <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
+                                           href="#coaSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="coaSubmenu">
+                                            <span><i class="bi bi-bookmarks me-2"></i>Chart Of Accounts</span>
+                                            <i class="bi bi-chevron-down ms-auto"></i>
+                                        </a>
+                                        <div class="collapse ps-4" id="coaSubmenu">
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/ChartOfAccounts/Create"
+                                               data-controller="ChartOfAccounts" data-action="Create">
+                                                <i class="bi bi-plus-circle me-2"></i> <span>Create New</span>
+                                            </a>
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/ChartOfAccounts/Index"
+                                               data-controller="ChartOfAccounts" data-action="HierarchyTree">
+                                                <i class="bi bi-diagram-3 me-2"></i> <span>COA Hierarchy Tree</span>
+                                            </a>
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/ChartOfAccounts/List"
+                                               data-controller="ChartOfAccounts" data-action="Index">
+                                                <i class="bi bi-list-columns me-2"></i> <span>COA List</span>
+                                            </a>
+                                        </div>
+                                    </div>
 
-                            <div class="nav-item">
-                                <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
-                                   href="#voucherSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="voucherSubmenu">
-                                    <span><i class="bi bi-receipt me-2"></i>Voucher Types</span>
-                                    <i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <div class="collapse ps-4" id="voucherSubmenu">
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/VoucherTypes/Create"
-                                       data-controller="VoucherTypes" data-action="Create">
-                                        <i class="bi bi-plus-circle me-2"></i> <span>New Voucher Type</span>
-                                    </a>
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/VoucherTypes/Index"
-                                       data-controller="VoucherTypes" data-action="Index">
-                                        <i class="bi bi-list-columns me-2"></i> <span>Voucher Type List</span>
-                                    </a>
-                                </div>
-                            </div>
+                                    <div class="nav-item">
+                                        <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
+                                           href="#voucherSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="voucherSubmenu">
+                                            <span><i class="bi bi-receipt me-2"></i>Voucher Types</span>
+                                            <i class="bi bi-chevron-down ms-auto"></i>
+                                        </a>
+                                        <div class="collapse ps-4" id="voucherSubmenu">
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/VoucherTypes/Create"
+                                               data-controller="VoucherTypes" data-action="Create">
+                                                <i class="bi bi-plus-circle me-2"></i> <span>New Voucher Type</span>
+                                            </a>
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/VoucherTypes/Index"
+                                               data-controller="VoucherTypes" data-action="Index">
+                                                <i class="bi bi-list-columns me-2"></i> <span>Voucher Type List</span>
+                                            </a>
+                                        </div>
+                                    </div>
 
-                            <div class="nav-item">
-                                <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
-                                   href="#transactionSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="transactionSubmenu">
-                                    <span><i class="bi bi-cash-stack me-2"></i>Transactions</span>
-                                    <i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <div class="collapse ps-4" id="transactionSubmenu">
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/Vouchers/Create"
-                                       data-controller="Vouchers" data-action="Create">
-                                        <i class="bi bi-file-earmark-plus me-2"></i> <span>New Voucher</span>
-                                    </a>
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/Vouchers/Index"
-                                       data-controller="Vouchers" data-action="Index">
-                                        <i class="bi bi-journal-text me-2"></i> <span>Basic Voucher List</span>
-                                    </a>
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/Vouchers/List"
-                                       data-controller="Vouchers" data-action="List">
-                                        <i class="bi bi-card-list me-2"></i> <span>View Vouchers</span>
-                                    </a>
-                                </div>
-                            </div>
-                        }
+                                    <div class="nav-item">
+                                        <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
+                                           href="#transactionSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="transactionSubmenu">
+                                            <span><i class="bi bi-cash-stack me-2"></i>Transactions</span>
+                                            <i class="bi bi-chevron-down ms-auto"></i>
+                                        </a>
+                                        <div class="collapse ps-4" id="transactionSubmenu">
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/Vouchers/Create"
+                                               data-controller="Vouchers" data-action="Create">
+                                                <i class="bi bi-file-earmark-plus me-2"></i> <span>New Voucher</span>
+                                            </a>
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/Vouchers/Index"
+                                               data-controller="Vouchers" data-action="Index">
+                                                <i class="bi bi-journal-text me-2"></i> <span>Basic Voucher List</span>
+                                            </a>
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/Vouchers/List"
+                                               data-controller="Vouchers" data-action="List">
+                                                <i class="bi bi-card-list me-2"></i> <span>View Vouchers</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
 
-                        // Admin + Accountant + Viewer reports menu
-                        if (User.IsInRole("Admin") || User.IsInRole("Accountant") || User.IsInRole("Viewer"))
-                        {
-                            <div class="nav-item">
-                                <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
-                                   href="#reportsSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportsSubmenu">
-                                    <span><i class="bi bi-file-earmark-bar-graph me-2"></i>Reports</span>
-                                    <i class="bi bi-chevron-down ms-auto"></i>
-                                </a>
-                                <div class="collapse ps-4" id="reportsSubmenu">
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/Reports/TrialBalance"
-                                       data-controller="Reports" data-action="TrialBalance">
-                                        <i class="bi bi-journal-check me-2"></i> <span>Trial Balance</span>
-                                    </a>
-                                    <a class="nav-link submenu-link d-flex align-items-center"
-                                       asp-page="/Reports/VoucherSummary"
-                                       data-controller="Reports" data-action="VoucherSummary">
-                                        <i class="bi bi-card-list me-2"></i> <span>Voucher Summary</span>
-                                    </a>
-                                </div>
-                            </div>
-                        }
-                    }
-                </nav>
+                                // Admin + Accountant + Viewer reports menu
+                                if (User.IsInRole("Admin") || User.IsInRole("Accountant") || User.IsInRole("Viewer"))
+                                {
+                                    <div class="nav-item">
+                                        <a class="nav-link d-flex justify-content-between align-items-center submenu-toggle"
+                                           href="#reportsSubmenu" data-bs-toggle="collapse" role="button" aria-expanded="false" aria-controls="reportsSubmenu">
+                                            <span><i class="bi bi-file-earmark-bar-graph me-2"></i>Reports</span>
+                                            <i class="bi bi-chevron-down ms-auto"></i>
+                                        </a>
+                                        <div class="collapse ps-4" id="reportsSubmenu">
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/Reports/TrialBalance"
+                                               data-controller="Reports" data-action="TrialBalance">
+                                                <i class="bi bi-journal-check me-2"></i> <span>Trial Balance</span>
+                                            </a>
+                                            <a class="nav-link submenu-link d-flex align-items-center"
+                                               asp-page="/Reports/VoucherSummary"
+                                               data-controller="Reports" data-action="VoucherSummary">
+                                                <i class="bi bi-card-list me-2"></i> <span>Voucher Summary</span>
+                                            </a>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </nav>
+                    </div>
+                </div>
 
                 <div class="logout-section mt-3">
                     @await Html.PartialAsync("_LoginPartial")
@@ -308,14 +345,17 @@
                 }
             });
 
-            // 🔧 Sidebar toggle handler
             $('#toggleSidebar').on('click', function () {
                 $('#sidebar').toggleClass('collapsed');
+
+                if ($('#sidebar').hasClass('collapsed')) {
+                    $('.nav-scrollable').css('overflow-x', 'visible');
+                } else {
+                    $('.nav-scrollable').css('overflow-x', 'hidden');
+                }
             });
         });
     </script>
-
-
 
     @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Antiforgery
     <input type="hidden" id="antiForgeryToken" value="@Antiforgery.GetAndStoreTokens(Context).RequestToken" />
