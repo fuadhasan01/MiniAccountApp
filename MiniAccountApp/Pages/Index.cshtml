@@ -11,29 +11,48 @@
     </div>
 
     <div class="row g-4 text-center">
-        <div class="col-md-4">
-            <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
-                <i class="bi bi-diagram-3 fs-1 text-secondary mb-3"></i>
-                <h5 class="fw-bold">Chart of Accounts</h5>
-                <p class="text-muted small">Organize your account structure into Assets, Liabilities, Income, Expenses, and more.</p>
+        @if (User.IsInRole("Admin") || User.IsInRole("Accountant"))
+        {
+            <div class="col-md-4">
+                <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
+                    <i class="bi bi-diagram-3 fs-1 text-secondary mb-3"></i>
+                    <h5 class="fw-bold">Chart of Accounts</h5>
+                    <p class="text-muted small">Organize your account structure into Assets, Liabilities, Income, Expenses, and more.</p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
-                <i class="bi bi-receipt fs-1 text-secondary mb-3"></i>
-                <h5 class="fw-bold">Voucher Management</h5>
-                <p class="text-muted small">Create and manage vouchers to record transactions efficiently and accurately.</p>
+            <div class="col-md-4">
+                <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
+                    <i class="bi bi-receipt fs-1 text-secondary mb-3"></i>
+                    <h5 class="fw-bold">Voucher Management</h5>
+                    <p class="text-muted small">Create and manage vouchers to record transactions efficiently and accurately.</p>
+                </div>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
-                <i class="bi bi-bar-chart-line fs-1 text-secondary mb-3"></i>
-                <h5 class="fw-bold">Financial Reports</h5>
-                <p class="text-muted small">Generate basic summaries of accounts to monitor the financial health of your organization.</p>
+        }
+
+        @if (User.IsInRole("Admin") || User.IsInRole("Accountant") || User.IsInRole("Viewer"))
+        {
+            <div class="col-md-4">
+                <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
+                    <i class="bi bi-bar-chart-line fs-1 text-secondary mb-3"></i>
+                    <h5 class="fw-bold">Financial Reports</h5>
+                    <p class="text-muted small">Generate basic summaries of accounts to monitor the financial health of your organization.</p>
+                </div>
             </div>
-        </div>
+        }
+
+        @if (User.IsInRole("Admin"))
+        {
+            <div class="col-md-4">
+                <div class="p-4 border rounded-3 bg-light shadow-sm h-100">
+                    <i class="bi bi-shield-lock fs-1 text-secondary mb-3"></i>
+                    <h5 class="fw-bold">Admin Panel</h5>
+                    <p class="text-muted small">Manage users, roles, and system configurations.</p>
+                </div>
+            </div>
+        }
     </div>
 </div>
+
 @section Styles {
     <style>
         .text-primary {

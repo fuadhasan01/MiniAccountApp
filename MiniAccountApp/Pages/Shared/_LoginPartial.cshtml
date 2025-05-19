@@ -2,24 +2,179 @@
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
 
+<style>
+    .user-panel {
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+        .user-panel:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+    .user-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background-color: var(--primary-color);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+    .user-name {
+        font-weight: 500;
+        color: #333;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .user-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn-logout {
+        transition: all 0.2s ease;
+    }
+
+        .btn-logout:hover {
+            transform: translateY(-1px);
+        }
+
+    .auth-links {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .auth-link {
+        display: flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        text-decoration: none;
+    }
+
+        .auth-link:hover {
+            background-color: var(--hover-bg);
+            transform: translateX(3px);
+        }
+
+        .auth-link i {
+            margin-right: 10px;
+            transition: all 0.2s ease;
+        }
+
+        .auth-link:hover i {
+            color: var(--primary-color);
+        }
+
+    @@media (max-width: 768px) {
+        .user-panel {
+            padding: 1rem;
+            margin: 0.5rem;
+        }
+
+        .user-info {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .user-actions {
+            flex-direction: row;
+            justify-content: center;
+        }
+
+        .auth-links {
+            flex-direction: row;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .auth-link {
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+    }
+</style>
+
 @if (SignInManager.IsSignedIn(User))
 {
-    <div class="user-panel p-3 border-top">
-        <div class="mb-2 text-muted">User Panel</div>
-        <div class="mb-2">Hello, @User.Identity?.Name!</div>
-        <form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
-            <button type="submit" class="btn btn-outline-danger btn-sm w-100">Logout</button>
-        </form>
+    <div class="user-panel p-3">
+        <div class="user-info">
+            <div class="user-avatar">
+                @User.Identity?.Name?.Substring(0, 1).ToUpper()
+            </div>
+            <div class="user-name">
+                @User.Identity?.Name
+            </div>
+        </div>
+
+        <div class="user-actions">
+            <a class="btn btn-outline-primary btn-sm" asp-area="Identity" asp-page="/Account/Manage/Index">
+                <i class="bi bi-gear me-1"></i> Manage Account
+            </a>
+            <form method="post" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                <button type="submit" class="btn btn-outline-danger btn-sm w-100 btn-logout">
+                    <i class="bi bi-box-arrow-right me-1"></i> Logout
+                </button>
+            </form>
+        </div>
     </div>
 }
 else
 {
-    <nav class="nav flex-column">
-        <a class="nav-link submenu-link" asp-area="Identity" asp-page="/Account/Login">
-            <i class="bi bi-box-arrow-in-right me-2"></i>Login
+    <div class="auth-links">
+        <a class="auth-link text-dark" asp-area="Identity" asp-page="/Account/Login">
+            <i class="bi bi-box-arrow-in-right"></i> Login
         </a>
-        <a class="nav-link submenu-link" asp-area="Identity" asp-page="/Account/Register">
-            <i class="bi bi-person-plus me-2"></i>Register
+        <a class="auth-link text-dark" asp-area="Identity" asp-page="/Account/Register">
+            <i class="bi bi-person-plus"></i> Register
         </a>
-    </nav>
+    </div>
 }
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const userPanel = document.querySelector('.user-panel');
+        const authLinks = document.querySelectorAll('.auth-link');
+
+        if (userPanel) {
+            userPanel.style.opacity = '0';
+            userPanel.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                userPanel.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+                userPanel.style.opacity = '1';
+                userPanel.style.transform = 'translateY(0)';
+            }, 100);
+        }
+
+        if (authLinks.length > 0) {
+            authLinks.forEach((link, index) => {
+                link.style.opacity = '0';
+                link.style.transform = 'translateX(-10px)';
+                setTimeout(() => {
+                    link.style.transition = `opacity 0.3s ease ${index * 0.1}s, transform 0.3s ease ${index * 0.1}s`;
+                    link.style.opacity = '1';
+                    link.style.transform = 'translateX(0)';
+                }, 100);
+            });
+        }
+    });
+</script>
