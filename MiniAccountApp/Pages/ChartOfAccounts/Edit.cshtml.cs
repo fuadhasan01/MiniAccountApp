@@ -55,32 +55,33 @@ namespace MiniAccountApp.Pages.ChartOfAccounts
                 {
                     return NotFound();
                 }
-            var parents = new List<ChartOfAccount>();
-            using (var parentCmd = new SqlCommand("sp_ManageChartOfAccounts", conn))
-            {
-                parentCmd.CommandType = CommandType.StoredProcedure;
-                parentCmd.Parameters.AddWithValue("@Action", "SELECT");
-
-                using var parentReader = await parentCmd.ExecuteReaderAsync();
-                while (await parentReader.ReadAsync())
+                var parents = new List<ChartOfAccount>();
+                using (var parentCmd = new SqlCommand("sp_ManageChartOfAccounts", conn))
                 {
-                    var parentAccountId = parentReader.GetGuid(parentReader.GetOrdinal("AccountId"));
-                    if (parentAccountId != id)
+                    parentCmd.CommandType = CommandType.StoredProcedure;
+                    parentCmd.Parameters.AddWithValue("@Action", "SELECT");
+
+                    using var parentReader = await parentCmd.ExecuteReaderAsync();
+                    while (await parentReader.ReadAsync())
                     {
-                        parents.Add(new ChartOfAccount
+                        var parentAccountId = parentReader.GetGuid(parentReader.GetOrdinal("AccountId"));
+                        if (parentAccountId != id)
                         {
-                            AccountId = parentAccountId,
-                            AccountCode = parentReader.GetString(parentReader.GetOrdinal("AccountCode")),
-                            AccountName = parentReader.GetString(parentReader.GetOrdinal("AccountName"))
-                        });
+                            parents.Add(new ChartOfAccount
+                            {
+                                AccountId = parentAccountId,
+                                AccountCode = parentReader.GetString(parentReader.GetOrdinal("AccountCode")),
+                                AccountName = parentReader.GetString(parentReader.GetOrdinal("AccountName"))
+                            });
+                        }
                     }
                 }
+
+                Account = account;
+                ParentAccounts = parents;
+
+                return Page();
             }
-
-            Account = account;
-            ParentAccounts = parents;
-
-            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
