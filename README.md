@@ -104,7 +104,7 @@ An optional feature allows exporting reports to Excel for external use or auditi
 
 ## 🔄 Folder Structure
 MiniAccountApp/
-![Folder Structure Screenshot](./wwwroot/screenshots/folder_structure.png)
+![Folder Structure Screenshot](./MiniAccountApp/wwwroot/screenshots/folder_structure.png)
 
 
 ---
@@ -192,41 +192,43 @@ To log in and test the application, use the following test accounts with their r
 ### Screenshots
 
 1. **Dashboard**  
-   ![Dashboard](./wwwroot/screenshots/1.png)
+   ![Dashboard](./MiniAccountApp/wwwroot/screenshots/1.png)
 
 2. **Sidebar (Admin)**  
-   ![Sidebar (Admin)](./wwwroot/screenshots/2.png)
+   ![Sidebar (Admin)](./MiniAccountApp/wwwroot/screenshots/2.png)
 
-3. **Sidebar (Accountant)**  
-   ![Sidebar (Accountant)](./wwwroot/screenshots/3.png)
+3. **Create Users**  
+   ![Create Users](./MiniAccountApp/wwwroot/screenshots/3.png)
 
-4. **Sidebar (Viewer)**  
-   ![Sidebar (Viewer)](./wwwroot/screenshots/4.png)
+4. **Create Chart of Accounts**  
+   ![Create Chart of Accounts](./MiniAccountApp/wwwroot/screenshots/4.png)
 
-5. **Voucher Form**  
-   ![Voucher Form](./wwwroot/screenshots/5.png)
+5. **Chart of Accounts Tree**  
+   ![Chart of Accounts Tree](./MiniAccountApp/wwwroot/screenshots/5.png)
 
-6. **Report View (1)**  
-   ![Report View 1](./wwwroot/screenshots/6.png)
+6. **Chart of Accounts List**  
+   ![Chart of Accounts List](./MiniAccountApp/wwwroot/screenshots/6.png)
 
-7. **Report View (2)**  
-   ![Report View 2](./wwwroot/screenshots/7.png)
+7. **Create Voucher Type**  
+   ![Create Voucher Type](./MiniAccountApp/wwwroot/screenshots/7.png)
 
-8. **Voucher Entry (Admin)**  
-   ![Voucher Entry Admin](./wwwroot/screenshots/8.png)
+8. **Voucher Type List**  
+   ![Voucher Type List](./MiniAccountApp/wwwroot/screenshots/8.png)
 
-9. **Voucher Entry (Accountant)**  
-   ![Voucher Entry Accountant](./wwwroot/screenshots/9.png)
+9. **Voucher Entry**  
+   ![Voucher Entry](./MiniAccountApp/wwwroot/screenshots/9.png)
 
-10. **Chart of Accounts (Admin)**  
-   ![Chart of Accounts Admin](./wwwroot/screenshots/10.png)
+10. **Basic Voucher List**  
+   ![Basic Voucher List](./MiniAccountApp/wwwroot/screenshots/10.png)
 
-11. **Chart of Accounts (Accountant)**  
-   ![Chart of Accounts Accountant](./wwwroot/screenshots/11.png)
+11. **Voucher View with export buttons**  
+   ![Voucher View with export buttons](./MiniAccountApp/wwwroot/screenshots/11.png)
 
-12. **Report Summary**  
-   ![Report Summary](./wwwroot/screenshots/12.png)
+12. **Trial Balance Report**  
+   ![Trial Balance Report](./MiniAccountApp/wwwroot/screenshots/12.png)
 
+13. **Voucher Summary Report**
+   ![Voucher Summary Report](./MiniAccountApp/wwwroot/screenshots/13.png)
 
 ---
 
