@@ -1,4 +1,15 @@
 # Mini Account Management System
+🔗 **Live Demo:** [Click here to try the app](http://www.miniaccountapp.somee.com/)
+
+## 🧪 Demo Credentials
+
+Use the following test accounts to log in and explore the system:
+
+| Role       | Username           | Password     |
+|------------|--------------------|--------------|
+| **Admin**      | admin@test.com     | Admin@123    |
+| **Accountant** | f@gmail.com        | Aa@123456    |
+| **Viewer**     | labib@gmail.com    | Labib@123    |
 
 Mini Account Management System is a simple yet powerful web-based platform designed to help businesses manage their financial records efficiently. Developed using ASP.NET Core Razor Pages and SQL Server with stored procedures (no LINQ or Entity Framework), this system supports role-based access, organized account structures, voucher management, and essential financial reporting.
 
