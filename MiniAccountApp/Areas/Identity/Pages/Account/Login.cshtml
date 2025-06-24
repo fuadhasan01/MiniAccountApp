@@ -11,6 +11,11 @@
     <div class="col-md-5 col-lg-4">
         <section>
             <form id="account" method="post">
+                <div class="text-center mb-3">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#demoLoginModal">
+                        Demo Login Info
+                    </button>
+                </div>
                 <h2 class="h5 text-center mb-3">Use a local account to log in</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger text-center mb-3" role="alert"></div>
@@ -44,6 +49,49 @@
                     <p><a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a></p>
                 </div>
             </form>
+            <!-- Demo Login Modal -->
+            <div class="modal fade" id="demoLoginModal" tabindex="-1" aria-labelledby="demoLoginModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header bg-light">
+                            <h5 class="modal-title" id="demoLoginModalLabel">Demo Login Credentials</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <table class="table table-bordered table-sm text-center align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Role</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Admin</td>
+                                        <td>admin@test.com</td>
+                                        <td>Admin@123</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Accountant</td>
+                                        <td>f@gmail.com</td>
+                                        <td>Aa@123456</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Viewer</td>
+                                        <td>labib@gmail.com</td>
+                                        <td>Labib@123</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-sm btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
     </div>
 </div>
