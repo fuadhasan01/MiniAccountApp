@@ -1,5 +1,5 @@
 # Mini Account Management System
-🔗 **Live Demo:** [Click here to try the app](http://www.miniaccountapp.somee.com/)
+🔗 **Live Demo:** [Click here to try the app](http://www.mincountapp.somee.com/)
 
 ## 🧪 Demo Credentials
 
